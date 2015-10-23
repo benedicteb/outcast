@@ -6,11 +6,12 @@ import numpy as np
 import pygame
 import logging
 
+from Placeable import Placeable
 from Item import Item
 
 DEFAULT_HEALTH = 100
 
-class Person(object):
+class Person(Placeable):
     """
     Base class for all characters in game.
     """
@@ -26,13 +27,8 @@ class Person(object):
         @param health The health that is given at init.
         @param position [x, y] the position at init.
         """
-        if not isinstance(position, (tuple, list, np.ndarray)):
-            logging.error(
-                "Position should be tuple/list with [x, y], set it to [0, 0]"
-            )
-            position = [0, 0]
-
-        self.health, self.position, self.facing = health, np.array(position), 0
+        super(Person, self).__init__(position)
+        self.health, self.facing = health, 0
         self.game, self.world = game, world
 
 
