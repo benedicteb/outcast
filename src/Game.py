@@ -139,6 +139,17 @@ class Game:
                     Game.INV_SPACE*j, Game.INV_WIDTH,
                     Game.INV_HEIGHT), 0)
 
+        # If player has inventory, fill
+        for i in range(len(self.player.inventory)):
+            x = i % Game.INV_COLS
+            y = i / Game.INV_ROWS
+
+            self.screen.blit(
+                    self.player.inventory[i].get_sprite(),
+                    [Game.INV_OFF + Game.INV_SPACE*x + Game.INV_WIDTH*x,
+                     Game.STATUSBAR_MARGIN + label.get_height() + Game.INV_OFF +\
+                     Game.INV_HEIGHT*y + Game.INV_SPACE*y])
+
         # Draw FPS
         FPS = 1. / self.dt
         font = pygame.font.Font(Game.MONOSPACE_FONT, Game.STATUSBAR_FONTSIZE)
