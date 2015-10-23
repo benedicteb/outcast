@@ -52,10 +52,13 @@ class Player(Person):
     def update(self):
         if (self.velocity != 0).any():
             newpos = self.position + self.velocity
-            if self.world.board[tuple(newpos)] in ('g'):
-                if self.move_time > self.move_cool:
-                    self.position = newpos
-                    self.move_time = 0
+            if (0 <= newpos[0] < self.world.shape[0] and
+                0 <= newpos[1] < self.world.shape[1] and
+                self.world.board[tuple(newpos)] in ('g') and
+                self.move_time > self.move_cool
+            ):
+                self.position = newpos
+                self.move_time = 0
         self.move_time += self.game.dt
 
     def give_item(self, item):
