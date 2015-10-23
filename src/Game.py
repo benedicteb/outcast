@@ -47,7 +47,7 @@ class Game:
         # self.world.add(self.player)
         # self.world.add(Planet([200,200], 500, 30))
 
-        self.items_in_world = [
+        self.placables = [
             Item("Axe", position=[10, 3]),
         ]
 
@@ -141,7 +141,7 @@ class Game:
         self.screen.blit(label, (self.width - label.get_width(), 0))
 
         # Draw placables
-        for item in self.items:
+        for item in self.placables:
             self.screen.blit(item.get_sprite(), item.position)
 
         pygame.display.update()
