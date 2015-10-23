@@ -25,7 +25,7 @@ class Person(object):
         """
         if not isinstance(position, (tuple, list)):
             logging.error(
-                "Position should be tuple/list with [y, x], set it to [0, 0]"
+                "Position should be tuple/list with [x, y], set it to [0, 0]"
             )
             position = [0, 0]
 
