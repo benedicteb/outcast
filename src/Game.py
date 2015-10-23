@@ -6,6 +6,7 @@ from pygame.locals import *
 
 from World import World
 from Person import Player
+from Item import Item
 
 class Game:
     SPRITES_LOCATION = "sprites/"
@@ -46,6 +47,9 @@ class Game:
         # self.world.add(self.player)
         # self.world.add(Planet([200,200], 500, 30))
 
+        self.items_in_world = [
+            Item("Axe", position=[10, 3]),
+        ]
 
     def start(self):
         self._draw()
@@ -135,6 +139,10 @@ class Game:
         font = pygame.font.Font(Game.MONOSPACE_FONT, Game.STATUSBAR_FONTSIZE)
         label = font.render("FPS: %d" % FPS, 1, (0, 0, 0))
         self.screen.blit(label, (self.width - label.get_width(), 0))
+
+        # Draw placables
+        for item in self.items:
+            self.screen.blit(item.get_sprite(), item.position)
 
         pygame.display.update()
 
