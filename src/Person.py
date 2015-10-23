@@ -38,7 +38,7 @@ class Player(Person):
     def __init__(self, health=DEFAULT_HEALTH, position):
         super(Player, self).__init__(health, position)
 
-        self.items = []
+        self.inventory = []
 
     def give_item(self, item):
         if not isinstance(item, Item):
@@ -47,7 +47,7 @@ class Player(Person):
             )
             return
 
-        self.items.append(item)
+        self.inventory.append(item)
 
 class NPC(Person):
     """
