@@ -3,6 +3,7 @@
 Contains player and NPC-classes.
 """
 import numpy as np
+import pygame
 import logging
 
 from Item import Item
@@ -31,7 +32,8 @@ class Person(object):
             )
             position = [0, 0]
 
-        self.health, self.position, self.facing = health, position, 0
+        self.health, self.position, self.facing = health, np.array(position), 0
+
 
 class Player(Person):
     """
@@ -41,6 +43,7 @@ class Player(Person):
         super(Player, self).__init__(position, health)
 
         self.inventory = []
+        self.sprite = pygame.image.load('sprites/player.png').convert_alpha()
 
     def give_item(self, item):
         if not isinstance(item, Item):

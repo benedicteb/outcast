@@ -79,9 +79,9 @@ class Game:
                     self.world.sprites[board[i,j]],
                     (i * World.METER_SIZE, j* World.METER_SIZE),
                 )
-        # self.screen.blit(
-            # self.player.get_sprite(),
-            # player_sprite_pos+offset,
-        # )
+        self.screen.blit(
+            self.player.sprite,
+            playpos * World.METER_SIZE,
+        )
         pygame.display.update()
 
