@@ -1,4 +1,5 @@
 import sys
+import os
 import numpy as np
 import pygame
 from pygame.locals import *
@@ -6,9 +7,23 @@ from pygame.locals import *
 from World import World
 from Person import Player
 
-
 class Game:
 
+    CANTERBURY_FONT = os.path.join("fonts", "Canterbury.ttf")
+    MONOSPACE_FONT = os.path.join("fonts", "Monospace.ttf")
+
+    STATUSBAR_OFFSET = 120
+    STATUSBAR_COLOR = (112, 112, 112)
+    STATUSBAR_FONTSIZE = 24
+    STATUSBAR_MARGIN = 10
+
+    # Inventory
+    INV_OFF = 10
+    INV_SPACE = 5
+    INV_WIDTH = 20
+    INV_HEIGHT = 20
+    INV_ROWS = 4
+    INV_COLS = 4
 
     def __init__(self):
         self.FPS = 30
@@ -88,11 +103,36 @@ class Game:
                     continue
                 self.screen.blit(
                     self.world.sprites[key],
-                    (ij + radius) * World.METER_SIZE,
+                    (ij + radius) * World.METER_SIZE + [Game.STATUSBAR_OFFSET, 0],
                 )
         self.screen.blit(
             self.player.sprite,
             np.array([radius, radius]) * World.METER_SIZE,
         )
+
+        # Draw statusbar
+        pygame.draw.rect(self.screen, Game.STATUSBAR_COLOR, (0, 0,
+            Game.STATUSBAR_OFFSET, self.height), 0)
+
+        # Text for statusbar
+        font = pygame.font.Font(Game.CANTERBURY_FONT, Game.STATUSBAR_FONTSIZE)
+        label = font.render("Inventory", 1, (0, 0, 0))
+        self.screen.blit(label, (Game.STATUSBAR_MARGIN, Game.STATUSBAR_MARGIN))
+
+        # Draw inventory boxes
+        for i in range(Game.INV_COLS):
+            for j in range(Game.INV_ROWS):
+                pygame.draw.rect(self.screen, (0,0,0), (Game.INV_WIDTH*i +\
+                    Game.INV_OFF + Game.INV_SPACE*i, Game.STATUSBAR_MARGIN +\
+                    label.get_height() + Game.INV_OFF + Game.INV_HEIGHT*j +\
+                    Game.INV_SPACE*j, Game.INV_WIDTH,
+                    Game.INV_HEIGHT), 0)
+
+        # Draw FPS
+        FPS = 1. / self.dt
+        font = pygame.font.Font(Game.MONOSPACE_FONT, Game.STATUSBAR_FONTSIZE)
+        label = font.render("FPS: %d" % FPS, 1, (0, 0, 0))
+        self.screen.blit(label, (self.width - label.get_width(), 0))
+
         pygame.display.update()
 
