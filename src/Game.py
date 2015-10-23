@@ -9,7 +9,8 @@ from Person import Player
 
 class Game:
 
-    FONT = os.path.join("fonts", "Canterbury.ttf")
+    CANTERBURY_FONT = os.path.join("fonts", "Canterbury.ttf")
+    MONOSPACE_FONT = os.path.join("fonts", "Monospace.ttf")
 
     STATUSBAR_OFFSET = 120
     STATUSBAR_COLOR = (112, 112, 112)
@@ -32,7 +33,6 @@ class Game:
         self.sight_radius = 10
         self.width  = (2*self.sight_radius + 1) * World.METER_SIZE
         self.height = (2*self.sight_radius + 1) * World.METER_SIZE
-        self.statusbar_font = pygame.font.Font(Game.FONT, Game.STATUSBAR_FONTSIZE)
         self.screen = pygame.display.set_mode((
             self.width, self.height
         ))
@@ -115,7 +115,8 @@ class Game:
             Game.STATUSBAR_OFFSET, self.height), 0)
 
         # Text for statusbar
-        label = self.statusbar_font.render("Inventory", 1, (0, 0, 0))
+        font = pygame.font.Font(Game.CANTERBURY_FONT, Game.STATUSBAR_FONTSIZE)
+        label = font.render("Inventory", 1, (0, 0, 0))
         self.screen.blit(label, (Game.STATUSBAR_MARGIN, Game.STATUSBAR_MARGIN))
 
         # Draw inventory boxes
@@ -126,6 +127,12 @@ class Game:
                     label.get_height() + Game.INV_OFF + Game.INV_HEIGHT*j +\
                     Game.INV_SPACE*j, Game.INV_WIDTH,
                     Game.INV_HEIGHT), 0)
+
+        # Draw FPS
+        FPS = 1. / self.dt
+        font = pygame.font.Font(Game.MONOSPACE_FONT, Game.STATUSBAR_FONTSIZE)
+        label = font.render("FPS: %d" % FPS, 1, (0, 0, 0))
+        self.screen.blit(label, (self.width - label.get_width(), 0))
 
         pygame.display.update()
 
