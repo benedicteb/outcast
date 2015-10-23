@@ -3,6 +3,9 @@
 Contains placeable classes.
 Things that goes on top of the landscape.
 """
+
+import numpy as np
+
 class Placeable(object):
     """
     Base class for Persons and Items.

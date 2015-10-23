@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
 import os
+import pygame
 
 from Placeable import Placeable
-from Game import Game
+import Game
 
 """
 Contains item-related classes.
@@ -17,5 +18,5 @@ class Item(Placeable):
 
         self.name = name
         self.sprite = pygame.image.load(
-            os.path.join(Game.SPRITES_LOCATION, name) + Game.SPRITES_EXT
+            os.path.join(Game.Game.SPRITES_LOCATION, name.lower()) + Game.Game.SPRITES_EXT
         ).convert_alpha()
