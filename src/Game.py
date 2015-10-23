@@ -90,7 +90,7 @@ class Game:
         # If player steps on item, give it to player
         for item in self.placables:
             if (self.player.position == item.position).all():
-                player.give_item(self.placables.pop(self.placables.index(item)))
+                self.player.give_item(self.placables.pop(self.placables.index(item)))
 
         self.player.update()
 
