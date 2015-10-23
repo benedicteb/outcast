@@ -5,7 +5,7 @@ import pygame
 class World:
 
     METER_SIZE = 20  # Number of pixels per square side.
-    VOID_COLOR = (150, 30, 255)
+    VOID_COLOR = (0, 0, 0)
 
 
     def __init__(self, infile=None, void_color=VOID_COLOR):

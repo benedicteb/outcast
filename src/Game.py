@@ -31,7 +31,7 @@ class Game:
         pygame.init()
         self.clock = pygame.time.Clock()
         self.sight_radius = 10
-        self.width  = (2*self.sight_radius + 1) * World.METER_SIZE
+        self.width  = (2*self.sight_radius + 1) * World.METER_SIZE + Game.STATUSBAR_OFFSET
         self.height = (2*self.sight_radius + 1) * World.METER_SIZE
         self.screen = pygame.display.set_mode((
             self.width, self.height
@@ -107,7 +107,7 @@ class Game:
                 )
         self.screen.blit(
             self.player.sprite,
-            np.array([radius, radius]) * World.METER_SIZE,
+            np.array([radius, radius]) * World.METER_SIZE + [Game.STATUSBAR_OFFSET, 0],
         )
 
         # Draw statusbar

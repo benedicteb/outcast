@@ -52,7 +52,6 @@ class Player(Person):
     def update(self):
         if (self.velocity != 0).any():
             newpos = self.position + self.velocity
-            print self.world.board[tuple(newpos)]
             if self.world.board[tuple(newpos)] in ('g'):
                 if self.move_time > self.move_cool:
                     self.position = newpos
