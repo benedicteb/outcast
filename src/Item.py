@@ -4,8 +4,6 @@ Contains item-related classes.
 """
 import os
 
-from Game import Game
-
 class Item(object):
     """
     Base class for all items.
