@@ -72,16 +72,27 @@ class Game:
         playpos = self.player.position
 
         self.screen.fill(World.VOID_COLOR)
-        for i, columns in enumerate(board[playpos[0]-radius : playpos[0]+radius+1]):
+        # for i, columns in enumerate(board[playpos[0]-radius : playpos[0]+radius+1]):
             # print i
-            for j, square in enumerate(columns[playpos[1]-radius : playpos[1]+radius+1]):
+            # for j, square in enumerate(columns[playpos[1]-radius : playpos[1]+radius+1]):
+        for i in xrange(2*radius + 1):
+            for j in xrange(2*radius + 1):
+                pos = np.array([i, j])
+                print pos
+                try:
+                    if (pos - playpos < 0).any():
+                        raise IndexError
+                    key = board[tuple(pos - playpos)]
+                except IndexError:
+                    # Outside of board.
+                    continue
                 self.screen.blit(
-                    self.world.sprites[board[i,j]],
-                    (i * World.METER_SIZE, j* World.METER_SIZE),
+                    self.world.sprites[key],
+                    pos * World.METER_SIZE,
                 )
         self.screen.blit(
             self.player.sprite,
-            playpos * World.METER_SIZE,
+            np.array([radius, radius]) * World.METER_SIZE,
         )
         pygame.display.update()
 
