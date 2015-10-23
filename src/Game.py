@@ -4,6 +4,7 @@ import pygame
 from pygame.locals import *
 
 from World import World
+from Person import Player
 
 
 class Game:
@@ -24,8 +25,7 @@ class Game:
         self.world = World(open("worlds/firstworld.board", 'r'))
         self.world.game = self
 
-        self.playerpos = np.array([3, 3])
-        # self.player = Plane(pos=[200,20], velocity=[33,0])
+        self.player = Player([3, 3])
         # self.world.add(self.player)
         # self.world.add(Planet([200,200], 500, 30))
 
@@ -69,11 +69,12 @@ class Game:
 
         board = self.world.board
         radius = self.sight_radius
+        playpos = self.player.position
 
         self.screen.fill(World.VOID_COLOR)
-        for i, columns in enumerate(board[self.playerpos[0]-radius : self.playerpos[0]+radius+1]):
+        for i, columns in enumerate(board[playpos[0]-radius : playpos[0]+radius+1]):
             # print i
-            for j, square in enumerate(columns[self.playerpos[1]-radius : self.playerpos[1]+radius+1]):
+            for j, square in enumerate(columns[playpos[1]-radius : playpos[1]+radius+1]):
                 self.screen.blit(
                     self.world.sprites[board[i,j]],
                     (i * World.METER_SIZE, j* World.METER_SIZE),
