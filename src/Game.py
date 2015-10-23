@@ -25,7 +25,7 @@ class Game:
         self.world = World(open("worlds/firstworld.board", 'r'))
         self.world.game = self
 
-        self.player = Player([3, 3])
+        self.player = Player([0, 0], game=self, world=self.world)
         # self.world.add(self.player)
         # self.world.add(Planet([200,200], 500, 30))
 
@@ -48,25 +48,25 @@ class Game:
             elif event.type == KEYDOWN:
                 if event.key in (K_a, K_d, K_w, K_s):
                     if event.key == K_a:
-                        self.player.velocity[0] += 1
-                    elif event.key == K_d:
                         self.player.velocity[0] -= 1
+                    elif event.key == K_d:
+                        self.player.velocity[0] += 1
                     elif event.key == K_w:
-                        self.player.velocity[1] += 1
-                    elif event.key == K_s:
                         self.player.velocity[1] -= 1
+                    elif event.key == K_s:
+                        self.player.velocity[1] += 1
             elif event.type == KEYUP:
                 if event.key in (K_a, K_d, K_w, K_s):
                     if event.key == K_a:
-                        self.player.velocity[0] -= 1
-                    elif event.key == K_d:
                         self.player.velocity[0] += 1
+                    elif event.key == K_d:
+                        self.player.velocity[0] -= 1
                     elif event.key == K_w:
-                        self.player.velocity[1] -= 1
-                    elif event.key == K_s:
                         self.player.velocity[1] += 1
+                    elif event.key == K_s:
+                        self.player.velocity[1] -= 1
 
-        self.player.update(self.dt)
+        self.player.update()
 
 
     def _draw(self):
@@ -76,19 +76,19 @@ class Game:
         playpos = self.player.position
 
         self.screen.fill(World.VOID_COLOR)
-        for i in xrange(2*radius + 1):
-            for j in xrange(2*radius + 1):
-                pos = np.array([i, j])
+        for i in xrange(-radius, radius + 1):
+            for j in xrange(-radius, radius + 1):
+                ij = np.array([i, j])
                 try:
-                    if (pos - playpos < 0).any():
+                    if (ij + playpos < 0).any():
                         raise IndexError
-                    key = board[tuple(pos - playpos)]
+                    key = board[tuple(ij + playpos)]
                 except IndexError:
                     # Outside of board.
                     continue
                 self.screen.blit(
                     self.world.sprites[key],
-                    pos * World.METER_SIZE,
+                    (ij + radius) * World.METER_SIZE,
                 )
         self.screen.blit(
             self.player.sprite,

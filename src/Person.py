@@ -15,7 +15,7 @@ class Person(object):
     Base class for all characters in game.
     """
 
-    def __init__(self, position, health=DEFAULT_HEALTH):
+    def __init__(self, position, game, world, health=DEFAULT_HEALTH):
         """
         Defaults to facing north. Facing codes:
         - 0: North
@@ -33,14 +33,15 @@ class Person(object):
             position = [0, 0]
 
         self.health, self.position, self.facing = health, np.array(position), 0
+        self.game, self.world = game, world
 
 
 class Player(Person):
     """
     Contains the player-controlled character.
     """
-    def __init__(self, position, health=DEFAULT_HEALTH):
-        super(Player, self).__init__(position, health)
+    def __init__(self, position, game, world, health=DEFAULT_HEALTH):
+        super(Player, self).__init__(position, game, world, health)
 
         self.inventory = []
         self.sprite = pygame.image.load('sprites/player.png').convert_alpha()
@@ -48,12 +49,15 @@ class Player(Person):
         self.move_time = np.inf
         self.velocity = np.array([0,0])
 
-    def update(self, dt):
+    def update(self):
         if (self.velocity != 0).any():
-            if self.move_time > self.move_cool:
-                self.position += self.velocity
-                self.move_time = 0
-        self.move_time += dt
+            newpos = self.position + self.velocity
+            print self.world.board[tuple(newpos)]
+            if self.world.board[tuple(newpos)] in ('g'):
+                if self.move_time > self.move_cool:
+                    self.position = newpos
+                    self.move_time = 0
+        self.move_time += self.game.dt
 
     def give_item(self, item):
         if not isinstance(item, Item):
