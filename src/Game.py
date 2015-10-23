@@ -8,6 +8,8 @@ from World import World
 from Person import Player
 
 class Game:
+    SPRITES_LOCATION = "sprites/"
+    SPRITES_EXT = ".png"
 
     CANTERBURY_FONT = os.path.join("fonts", "Canterbury.ttf")
     MONOSPACE_FONT = os.path.join("fonts", "Monospace.ttf")

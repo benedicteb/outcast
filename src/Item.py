@@ -2,9 +2,14 @@
 """
 Contains item-related classes.
 """
+import os
+
+from Game import Game
+
 class Item(object):
     """
     Base class for all items.
     """
-    def __init__(self, nam, icon):
-        self.name, self.icon = name, icon
+    def __init__(self, name):
+        self.name, self.sprite_filename = name, os.path.join(Game.SPRITES_LOCATION,
+                name) + Game.SPRITES_EXT
