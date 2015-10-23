@@ -6,8 +6,11 @@ from pygame.locals import *
 
 from World import World
 from Person import Player
+from Item import Item
 
 class Game:
+    SPRITES_LOCATION = "sprites/"
+    SPRITES_EXT = ".png"
 
     CANTERBURY_FONT = os.path.join("fonts", "Canterbury.ttf")
     MONOSPACE_FONT = os.path.join("fonts", "Monospace.ttf")
@@ -44,6 +47,9 @@ class Game:
         # self.world.add(self.player)
         # self.world.add(Planet([200,200], 500, 30))
 
+        self.placables = [
+            Item("Axe", position=[10, 3]),
+        ]
 
     def start(self):
         self._draw()
@@ -80,6 +86,11 @@ class Game:
                         self.player.velocity[1] += 1
                     elif event.key == K_s:
                         self.player.velocity[1] -= 1
+
+        # If player steps on item, give it to player
+        for item in self.placables:
+            if (player.position == item.position).all():
+                player.give_item(self.placables.pop(self.placables.index(item)))
 
         self.player.update()
 
@@ -133,6 +144,10 @@ class Game:
         font = pygame.font.Font(Game.MONOSPACE_FONT, Game.STATUSBAR_FONTSIZE)
         label = font.render("FPS: %d" % FPS, 1, (0, 0, 0))
         self.screen.blit(label, (self.width - label.get_width(), 0))
+
+        # Draw placables
+        for item in self.placables:
+            self.screen.blit(item.get_sprite(), item.position)
 
         pygame.display.update()
 

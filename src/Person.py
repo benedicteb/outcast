@@ -18,18 +18,13 @@ class Person(Placeable):
 
     def __init__(self, position, game, world, health=DEFAULT_HEALTH):
         """
-        Defaults to facing north. Facing codes:
-        - 0: North
-        - 1: East
-        - 2: South
-        - 3: West
-
         @param health The health that is given at init.
         @param position [x, y] the position at init.
         """
         super(Person, self).__init__(position)
-        self.health, self.facing = health, 0
-        self.game, self.world = game, world
+        self.health = health
+        self.game = game
+        self.world = world
 
 
 class Player(Person):
