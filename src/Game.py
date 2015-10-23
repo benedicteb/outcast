@@ -46,23 +46,27 @@ class Game:
                 pygame.quit()
                 sys.exit()
             elif event.type == KEYDOWN:
-                if event.key == K_LEFT or event.key == K_a:
-                    pass
-                elif event.key == K_RIGHT or event.key == K_d:
-                    pass
-                elif event.key == K_UP or event.key == K_w:
-                    pass
-                elif event.key == K_DOWN or event.key == K_s:
-                    pass
+                if event.key in (K_a, K_d, K_w, K_s):
+                    if event.key == K_a:
+                        self.player.velocity[0] += 1
+                    elif event.key == K_d:
+                        self.player.velocity[0] -= 1
+                    elif event.key == K_w:
+                        self.player.velocity[1] += 1
+                    elif event.key == K_s:
+                        self.player.velocity[1] -= 1
             elif event.type == KEYUP:
-                if event.key == K_LEFT or event.key == K_a:
-                    pass
-                elif event.key == K_RIGHT or event.key == K_d:
-                    pass
-                elif event.key == K_UP or event.key == K_w:
-                    pass
-                elif event.key == K_DOWN or event.key == K_s:
-                    pass
+                if event.key in (K_a, K_d, K_w, K_s):
+                    if event.key == K_a:
+                        self.player.velocity[0] -= 1
+                    elif event.key == K_d:
+                        self.player.velocity[0] += 1
+                    elif event.key == K_w:
+                        self.player.velocity[1] -= 1
+                    elif event.key == K_s:
+                        self.player.velocity[1] += 1
+
+        self.player.update(self.dt)
 
 
     def _draw(self):
@@ -72,13 +76,9 @@ class Game:
         playpos = self.player.position
 
         self.screen.fill(World.VOID_COLOR)
-        # for i, columns in enumerate(board[playpos[0]-radius : playpos[0]+radius+1]):
-            # print i
-            # for j, square in enumerate(columns[playpos[1]-radius : playpos[1]+radius+1]):
         for i in xrange(2*radius + 1):
             for j in xrange(2*radius + 1):
                 pos = np.array([i, j])
-                print pos
                 try:
                     if (pos - playpos < 0).any():
                         raise IndexError

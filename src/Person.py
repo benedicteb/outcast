@@ -44,6 +44,16 @@ class Player(Person):
 
         self.inventory = []
         self.sprite = pygame.image.load('sprites/player.png').convert_alpha()
+        self.move_cool = 0.25  # seconds
+        self.move_time = np.inf
+        self.velocity = np.array([0,0])
+
+    def update(self, dt):
+        if (self.velocity != 0).any():
+            if self.move_time > self.move_cool:
+                self.position += self.velocity
+                self.move_time = 0
+        self.move_time += dt
 
     def give_item(self, item):
         if not isinstance(item, Item):
