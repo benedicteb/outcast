@@ -15,9 +15,9 @@ class Game:
         self.dt = 1. / self.FPS
         pygame.init()
         self.clock = pygame.time.Clock()
-        self.sight_radius = 20
-        self.width  = 41 * World.METER_SIZE
-        self.height = 41 * World.METER_SIZE
+        self.sight_radius = 10
+        self.width  = (2*self.sight_radius + 1) * World.METER_SIZE
+        self.height = (2*self.sight_radius + 1) * World.METER_SIZE
         self.screen = pygame.display.set_mode((
             self.width, self.height
         ))
