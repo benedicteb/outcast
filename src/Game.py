@@ -158,7 +158,9 @@ class Game:
 
         # Draw placables
         for item in self.placables:
-            self.screen.blit(item.get_sprite(), item.position)
+            self.screen.blit(item.get_sprite(),
+                    np.array(item.position) * World.METER_SIZE +\
+                    [Game.STATUSBAR_OFFSET, 0])
 
         pygame.display.update()
 
