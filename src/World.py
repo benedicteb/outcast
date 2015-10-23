@@ -14,7 +14,7 @@ class World:
             board = []
             for line in infile:
                 board.append(list(line.strip()))
-            self.board = np.array(board)
+            self.board = np.array(board).transpose()
             self.shape = self.board.shape
         self.void_color = void_color
         self.game = None

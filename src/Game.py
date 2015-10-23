@@ -71,12 +71,12 @@ class Game:
         radius = self.sight_radius
 
         self.screen.fill(World.VOID_COLOR)
-        for i, row in enumerate(board[self.playerpos[0]-radius : self.playerpos[0]+radius+1]):
+        for i, columns in enumerate(board[self.playerpos[0]-radius : self.playerpos[0]+radius+1]):
             # print i
-            for j, square in enumerate(row[self.playerpos[1]-radius : self.playerpos[1]+radius+1]):
+            for j, square in enumerate(columns[self.playerpos[1]-radius : self.playerpos[1]+radius+1]):
                 self.screen.blit(
                     self.world.sprites[board[i,j]],
-                    (j * World.METER_SIZE, i* World.METER_SIZE),
+                    (i * World.METER_SIZE, j* World.METER_SIZE),
                 )
         # self.screen.blit(
             # self.player.get_sprite(),
