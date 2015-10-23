@@ -87,6 +87,11 @@ class Game:
                     elif event.key == K_s:
                         self.player.velocity[1] -= 1
 
+        # If player steps on item, give it to player
+        for item in self.placables:
+            if (player.position == item.position).all():
+                player.give_item(self.placables.pop(self.placables.index(item)))
+
         self.player.update()
 
 
