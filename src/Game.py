@@ -117,6 +117,7 @@ class Game:
                     (ij + radius) * World.METER_SIZE + [Game.STATUSBAR_OFFSET, 0],
                 )
 
+
         self.screen.blit(
             self.player.sprite,
             np.array([radius, radius]) * World.METER_SIZE + [Game.STATUSBAR_OFFSET, 0],
@@ -160,7 +161,7 @@ class Game:
         # Draw placables
         for item in self.placables:
             self.screen.blit(item.get_sprite(),
-                    np.array(item.position) * World.METER_SIZE +\
+                    (item.position - self.player.position + radius) * World.METER_SIZE +\
                     [Game.STATUSBAR_OFFSET, 0])
 
         pygame.display.update()
