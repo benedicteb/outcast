@@ -49,6 +49,7 @@ class Game:
 
         self.placables = [
             Item("Axe", position=[10, 3]),
+            Item("Boat", position=[2, 3])
         ]
 
     def start(self):
