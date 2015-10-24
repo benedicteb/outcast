@@ -16,7 +16,6 @@ class Person(Placeable):
     """
     Base class for all characters in game.
     """
-
     def __init__(self, position, game, world, sprite, health=DEFAULT_HEALTH):
         """
         @param health The health that is given at init.
@@ -26,13 +25,6 @@ class Person(Placeable):
         self.health = health
         self.game = game
         self.world = world
-
-class Player(Person):
-    """
-    Contains the player-controlled character.
-    """
-    def __init__(self, position, game, world, health=DEFAULT_HEALTH):
-        super(Player, self).__init__(position, game, world, "player", health)
 
         self.inventory = []
         self.move_cool = 0.25  # seconds
@@ -70,8 +62,14 @@ class Player(Person):
         """
         Changes the velocity of the player.
         """
-        speed_vector = np.asarray(speed_vector)
         self.velocity += speed_vector
+
+class Player(Person):
+    """
+    Contains the player-controlled character.
+    """
+    def __init__(self, position, game, world, health=DEFAULT_HEALTH):
+        super(Player, self).__init__(position, game, world, "player", health)
 
     def give_item(self, item):
         if not isinstance(item, Item):
@@ -96,12 +94,74 @@ class NPC(Person):
 
         TODO
         """
-        return [1, 0]
+        water_to_left = 0
+        water_to_right = 0
+        water_up = 0
+        water_down = 0
+
+        for i in range(self.position[0], self.world.shape[0]):
+            water_to_right += 1
+
+            if self.world.board[i, self.position[1]] == 'w':
+                break
+
+        for i in list(reversed(range(0, self.position[0]))):
+            water_to_left += 1
+
+            if self.world.board[i, self.position[1]] == 'w':
+                break
+
+        for i in range(self.position[1], self.world.shape[1]):
+            water_up += 1
+
+            if self.world.board[self.position[0], i] == 'w':
+                break
+
+        for i in list(reversed(range(0, self.position[1]))):
+            water_down += 1
+
+            if self.world.board[self.position[0], i] == 'w':
+                break
+
+        print "Left: %d Right: %d Up: %d Down: %d" % (water_to_left,
+                water_to_right, water_up, water_down)
+
+        if np.random.random() > 0.8:
+            right_direction = max([water_down, water_up, water_to_left,
+                water_to_right])
+            if right_direction == water_down:
+                return np.asarray([0, -1])
+            elif right_direction == water_up:
+                return np.asarray([0, 1])
+            elif right_direction == water_to_right:
+                return np.asarray([1, 0])
+            elif right_direction == water_to_left:
+                return np.asarray([-1, 0])
+
+        return np.asarray([0, 0])
 
     def update(self):
         """
         """
-        pass
+        goal = self.next_step()
+        newpos = self.position + (self.velocity + goal)
+
+        # If next is water, try turn
+        is_water = self.world.board[tuple(newpos)] == 'w'
+        if is_water:
+            self.velocity = np.asarray([0, 0])
+
+        # If at end of world, move
+        at_yend = self.position[0] == (self.world.shape[0] - 1)
+        at_xend = self.position[1] == (self.world.shape[1] - 1)
+        if at_yend or at_xend:
+            self.velocity = np.asarray([0, 0])
+
+        if (self.velocity == [0, 0]).all():
+            self.speed_up(goal)
+
+        # Do the actual moving
+        super(NPC, self).update()
 
     def interact():
         """

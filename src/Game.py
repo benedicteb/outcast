@@ -99,6 +99,9 @@ class Game:
 
         self.player.update()
 
+        for npc in self.npcs:
+            npc.update()
+
     def _draw(self):
         board = self.world.board
         radius = self.sight_radius
