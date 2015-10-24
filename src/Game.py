@@ -7,6 +7,7 @@ from pygame.locals import *
 from World import World
 from Person import Player, NPC
 from Item import Item
+from Text import TextDialog
 
 class Game:
     SPRITES_LOCATION = "sprites/"
@@ -57,6 +58,8 @@ class Game:
             NPC([0, 2], game=self, world=self.world),
         ]
 
+        self.text_dialog = None
+
     def start(self):
         self._draw()
         while 1:
@@ -65,14 +68,13 @@ class Game:
             self.dt = self.clock.tick(self.FPS) * 0.001
             # print self.clock.get_fps()
 
-
     def _update(self):
         for event in pygame.event.get(): # event handling loop
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
             elif event.type == KEYDOWN:
-                if event.key in (K_a, K_d, K_w, K_s):
+                if event.key in (K_a, K_d, K_w, K_s) and not self.text_dialog:
                     if event.key == K_a:
                         self.player.speed_up([-1, 0])
                     elif event.key == K_d:
@@ -81,8 +83,11 @@ class Game:
                         self.player.speed_up([0, -1])
                     elif event.key == K_s:
                         self.player.speed_up([0, 1])
+                if event.key == K_e and self.text_dialog:
+                    if not self.text_dialog.next_page():
+                        self.text_dialog = None
             elif event.type == KEYUP:
-                if event.key in (K_a, K_d, K_w, K_s):
+                if event.key in (K_a, K_d, K_w, K_s) and not self.text_dialog:
                     if event.key == K_a:
                         self.player.speed_up([1, 0])
                     elif event.key == K_d:
@@ -178,5 +183,9 @@ class Game:
             self.screen.blit(npc.get_sprite(),
                     (npc.position - self.player.position + radius) * World.METER_SIZE +\
                     [Game.STATUSBAR_OFFSET, 0])
+
+        # If text dialog, draw it
+        if self.text_dialog:
+            self.text_dialog.render()
 
         pygame.display.update()

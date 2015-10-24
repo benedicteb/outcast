@@ -71,6 +71,12 @@ class Player(Person):
     def __init__(self, position, game, world, health=DEFAULT_HEALTH):
         super(Player, self).__init__(position, game, world, "player", health)
 
+    def update(self):
+        if self.game.text_dialog:
+            self.velocity = np.asarray([0, 0])
+
+        super(Player, self).update()
+
     def give_item(self, item):
         if not isinstance(item, Item):
             logging.error(
