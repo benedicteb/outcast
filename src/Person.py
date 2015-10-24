@@ -51,6 +51,12 @@ class Player(Person):
             # Check if new position is on walkable place
             on_walkable = self.world.board[tuple(newpos)] in ('g')
 
+            # If new position is on water, must have boat
+            if self.world.board[tuple(newpos)] == 'w':
+                names = [item.name for item in self.inventory]
+                has_boat = 'Boat' in names
+                on_walkable = has_boat
+
             # Only walk after certain cooldown
             cooldown_passed = self.move_time > self.move_cool
 
@@ -60,6 +66,13 @@ class Player(Person):
                 self.move_time = 0
 
         self.move_time += self.game.dt
+
+    def speed_up(self, speed_vector):
+        """
+        Changes the velocity of the player.
+        """
+        speed_vector = np.asarray(speed_vector)
+        self.velocity += speed_vector
 
     def give_item(self, item):
         if not isinstance(item, Item):

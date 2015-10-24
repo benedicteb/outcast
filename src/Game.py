@@ -68,23 +68,23 @@ class Game:
             elif event.type == KEYDOWN:
                 if event.key in (K_a, K_d, K_w, K_s):
                     if event.key == K_a:
-                        self.player.velocity[0] -= 1
+                        self.player.speed_up([-1, 0])
                     elif event.key == K_d:
-                        self.player.velocity[0] += 1
+                        self.player.speed_up([1, 0])
                     elif event.key == K_w:
-                        self.player.velocity[1] -= 1
+                        self.player.speed_up([0, -1])
                     elif event.key == K_s:
-                        self.player.velocity[1] += 1
+                        self.player.speed_up([0, 1])
             elif event.type == KEYUP:
                 if event.key in (K_a, K_d, K_w, K_s):
                     if event.key == K_a:
-                        self.player.velocity[0] += 1
+                        self.player.speed_up([1, 0])
                     elif event.key == K_d:
-                        self.player.velocity[0] -= 1
+                        self.player.speed_up([-1, 0])
                     elif event.key == K_w:
-                        self.player.velocity[1] += 1
+                        self.player.speed_up([0, 1])
                     elif event.key == K_s:
-                        self.player.velocity[1] -= 1
+                        self.player.speed_up([0, -1])
 
         # If player steps on item, give it to player
         for item in self.placables:
