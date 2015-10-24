@@ -43,13 +43,22 @@ class Player(Person):
     def update(self):
         if (self.velocity != 0).any():
             newpos = self.position + self.velocity
-            if (0 <= newpos[0] < self.world.shape[0] and
-                0 <= newpos[1] < self.world.shape[1] and
-                self.world.board[tuple(newpos)] in ('g') and
-                self.move_time > self.move_cool
-            ):
+
+            # Check if outside bounds of map
+            inside_x = 0 <= newpos[0] < self.world.shape[0]
+            inside_y = 0 <= newpos[1] < self.world.shape[1]
+
+            # Check if new position is on walkable place
+            on_walkable = self.world.board[tuple(newpos)] in ('g')
+
+            # Only walk after certain cooldown
+            cooldown_passed = self.move_time > self.move_cool
+
+            # Check if step is valid, and if it is, move
+            if (inside_x and inside_y and on_walkable and cooldown_passed):
                 self.position = newpos
                 self.move_time = 0
+
         self.move_time += self.game.dt
 
     def give_item(self, item):
