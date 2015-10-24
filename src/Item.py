@@ -15,4 +15,5 @@ class Item(Placeable):
     """
     def __init__(self, name, position):
         super(Item, self).__init__(position, sprite=name.lower())
+        self.name = name
 
