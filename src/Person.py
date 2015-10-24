@@ -2,6 +2,7 @@
 """
 Contains player and NPC-classes.
 """
+import os
 import numpy as np
 import pygame
 import logging
@@ -16,26 +17,24 @@ class Person(Placeable):
     Base class for all characters in game.
     """
 
-    def __init__(self, position, game, world, health=DEFAULT_HEALTH):
+    def __init__(self, position, game, world, sprite, health=DEFAULT_HEALTH):
         """
         @param health The health that is given at init.
         @param position [x, y] the position at init.
         """
-        super(Person, self).__init__(position)
+        super(Person, self).__init__(position, sprite)
         self.health = health
         self.game = game
         self.world = world
-
 
 class Player(Person):
     """
     Contains the player-controlled character.
     """
     def __init__(self, position, game, world, health=DEFAULT_HEALTH):
-        super(Player, self).__init__(position, game, world, health)
+        super(Player, self).__init__(position, game, world, "player", health)
 
         self.inventory = []
-        self.sprite = pygame.image.load('sprites/player.png').convert_alpha()
         self.move_cool = 0.25  # seconds
         self.move_time = np.inf
         self.velocity = np.array([0,0])
@@ -87,11 +86,25 @@ class NPC(Person):
     """
     Contains a character controlled by the game.
     """
-    def next_step():
+    def __init__(self, position, game, world, health=DEFAULT_HEALTH):
+        super(NPC, self).__init__(position, game, world, "npc", health)
+
+    def next_step(self):
         """
         Since the game controls this character, some algorithm should say where
         it moves.
 
         TODO
+        """
+        return [1, 0]
+
+    def update(self):
+        """
+        """
+        pass
+
+    def interact():
+        """
+        Called when player interacts with this NPC.
         """
         pass

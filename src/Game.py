@@ -5,7 +5,7 @@ import pygame
 from pygame.locals import *
 
 from World import World
-from Person import Player
+from Person import Player, NPC
 from Item import Item
 
 class Game:
@@ -50,6 +50,11 @@ class Game:
         self.placables = [
             Item("Axe", position=[10, 3]),
             Item("Boat", position=[2, 3])
+        ]
+
+        self.npcs = [
+            NPC([0, 1], game=self, world=self.world),
+            NPC([0, 2], game=self, world=self.world),
         ]
 
     def start(self):
@@ -163,6 +168,12 @@ class Game:
         for item in self.placables:
             self.screen.blit(item.get_sprite(),
                     (item.position - self.player.position + radius) * World.METER_SIZE +\
+                    [Game.STATUSBAR_OFFSET, 0])
+
+        # Draw NPCs
+        for npc in self.npcs:
+            self.screen.blit(npc.get_sprite(),
+                    (npc.position - self.player.position + radius) * World.METER_SIZE +\
                     [Game.STATUSBAR_OFFSET, 0])
 
         pygame.display.update()

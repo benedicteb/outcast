@@ -14,9 +14,5 @@ class Item(Placeable):
     Base class for all items.
     """
     def __init__(self, name, position):
-        super(Item, self).__init__(position)
+        super(Item, self).__init__(position, sprite=name.lower())
 
-        self.name = name
-        self.sprite = pygame.image.load(
-            os.path.join(Game.Game.SPRITES_LOCATION, name.lower()) + Game.Game.SPRITES_EXT
-        ).convert_alpha()

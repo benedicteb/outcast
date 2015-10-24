@@ -3,29 +3,39 @@
 Contains placeable classes.
 Things that goes on top of the landscape.
 """
-
 import numpy as np
+import os
+import pygame
+
+import Game
 
 class Placeable(object):
     """
     Base class for Persons and Items.
     """
 
-    def __init__(self, position):
+    def __init__(self, position, sprite):
         """
         Defaults to facing north. Facing codes:
         - 0: North
         - 1: East
         - 2: South
         - 3: West
+
+        @param sprite name of sprite-file, no need for path nor extension.
         """
         if not isinstance(position, (tuple, list, np.ndarray)):
             logging.error(
                 "Position should be arraylike with [x, y]. Set it to [0, 0]."
             )
             position = [0, 0]
+
         self.position = np.array(position)
         self.facing = 0
+
+        self.sprite = pygame.image.load(
+            os.path.join(Game.Game.SPRITES_LOCATION, sprite) + Game.Game.SPRITES_EXT
+        ).convert_alpha()
 
     def get_sprite(self):
         # Rotate the sprite while keeping its center and size.
