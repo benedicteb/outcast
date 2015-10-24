@@ -153,7 +153,7 @@ class Game:
         # Draw FPS
         FPS = 1. / self.dt
         font = pygame.font.Font(Game.MONOSPACE_FONT, Game.STATUSBAR_FONTSIZE)
-        label = font.render("FPS: %d" % FPS, 1, (0, 0, 0))
+        label = font.render("FPS: %d" % FPS, 1, (255, 0, 0))
         self.screen.blit(label, (self.width - label.get_width(), 0))
 
         # Draw placables
