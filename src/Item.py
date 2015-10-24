@@ -17,3 +17,10 @@ class Item(Placeable):
         super(Item, self).__init__(position, sprite=name.lower())
         self.name = name
 
+class Page(Item):
+    """
+    Pages contain text.
+    """
+    def __init__(self, text, position):
+        super(Page, self).__init__("Page", position)
+        self.text = text

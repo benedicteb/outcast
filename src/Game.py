@@ -6,7 +6,7 @@ from pygame.locals import *
 
 from World import World
 from Person import Player, NPC
-from Item import Item
+from Item import Item, Page
 from Text import TextDialog
 
 class Game:
@@ -50,7 +50,10 @@ class Game:
 
         self.placables = [
             Item("Axe", position=[10, 3]),
-            Item("Boat", position=[2, 3])
+            Item("Boat", position=[2, 3]),
+            Page("This is the first page.", position=[20, 3]),
+            Page("Second page.", position=[21, 3]),
+            Page("Third page.", position=[22, 3]),
         ]
 
         self.npcs = [
@@ -101,6 +104,11 @@ class Game:
         for item in self.placables:
             if (self.player.position == item.position).all():
                 self.player.give_item(self.placables.pop(self.placables.index(item)))
+
+                if not item.name.lower() == "page":
+                    self.text_dialog = TextDialog("You got the %s!" % item.name, self)
+                else:
+                    self.text_dialog = TextDialog(item.text, self)
 
         self.player.update()
 
