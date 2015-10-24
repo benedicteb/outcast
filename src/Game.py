@@ -61,7 +61,6 @@ class Game:
 
 
     def _update(self):
-
         for event in pygame.event.get(): # event handling loop
             if event.type == QUIT:
                 pygame.quit()
@@ -94,17 +93,17 @@ class Game:
 
         self.player.update()
 
-
     def _draw(self):
-
         board = self.world.board
         radius = self.sight_radius
         playpos = self.player.position
 
         self.screen.fill(World.VOID_COLOR)
+
         for i in xrange(-radius, radius + 1):
             for j in xrange(-radius, radius + 1):
                 ij = np.array([i, j])
+
                 try:
                     if (ij + playpos < 0).any():
                         raise IndexError
@@ -112,10 +111,12 @@ class Game:
                 except IndexError:
                     # Outside of board.
                     continue
+
                 self.screen.blit(
                     self.world.sprites[key],
                     (ij + radius) * World.METER_SIZE + [Game.STATUSBAR_OFFSET, 0],
                 )
+
         self.screen.blit(
             self.player.sprite,
             np.array([radius, radius]) * World.METER_SIZE + [Game.STATUSBAR_OFFSET, 0],
@@ -163,4 +164,3 @@ class Game:
                     [Game.STATUSBAR_OFFSET, 0])
 
         pygame.display.update()
-
