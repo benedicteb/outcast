@@ -9,6 +9,16 @@ from Person import Player, NPC
 from Item import Item, Page
 from Text import TextDialog
 
+# Just some dummy text
+PAGE1="""A long time ago, in a galaxy far far away. There once was a princess
+called Rapunzel. She had been bewitched by an evil wizard."""
+PAGE2="""When she grew up she wanted to be rid of the curse. However even though
+the king summoned every wizard and witch in the kingdom, none could dissolve the
+curse."""
+PAGE3="""Then one day a beautiful prince approached the king. He told him that
+he had learned from a fairy how to bewitchment could be dissolved. He just had
+to build a ship that could fly, swim and also run on land."""
+
 class Game:
     SPRITES_LOCATION = "sprites/"
     SPRITES_EXT = ".png"
@@ -51,9 +61,9 @@ class Game:
         self.placables = [
             Item("Axe", position=[10, 3]),
             Item("Boat", position=[2, 3]),
-            Page("This is the first page.", position=[20, 3]),
-            Page("Second page.", position=[21, 3]),
-            Page("Third page.", position=[22, 3]),
+            Page(PAGE1, position=[20, 3]),
+            Page(PAGE2, position=[21, 3]),
+            Page(PAGE3, position=[22, 3]),
         ]
 
         self.npcs = [
