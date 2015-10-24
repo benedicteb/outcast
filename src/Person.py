@@ -123,9 +123,6 @@ class NPC(Person):
             if self.world.board[self.position[0], i] == 'w':
                 break
 
-        print "Left: %d Right: %d Up: %d Down: %d" % (water_to_left,
-                water_to_right, water_up, water_down)
-
         if np.random.random() > 0.8:
             right_direction = max([water_down, water_up, water_to_left,
                 water_to_right])
