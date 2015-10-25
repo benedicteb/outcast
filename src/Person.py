@@ -9,6 +9,7 @@ import logging
 
 from Placeable import Placeable
 from Item import Item
+from FindPath import Maze
 
 DEFAULT_HEALTH = 100
 
@@ -92,6 +93,8 @@ class NPC(Person):
     """
     def __init__(self, position, game, world, health=DEFAULT_HEALTH):
         super(NPC, self).__init__(position, game, world, "npc", health)
+        self.set_target()
+        self.set_path()
 
     def next_step(self):
         """
@@ -143,9 +146,36 @@ class NPC(Person):
 
         return np.asarray([0, 0])
 
+    def set_target(self):
+        # target = self.position + (self.position - self.game.player.position)
+        target = self.position + [0, 1]
+        #TODO What if target is in water or outside the board?
+        self.target = target
+
+    def set_path(self):
+        maze = Maze(
+            self.position,
+            self.target,
+            self.world.board == 'g',
+        )
+        self.path = maze.solve(20)[1]
+
     def update(self):
         """
         """
+        # Only walk after certain cooldown
+        cooldown_passed = self.move_time > self.move_cool
+        if cooldown_passed:
+            if len(self.path) == 0:
+                self.set_target()
+                self.set_path()
+            self.position = self.path.pop(0)
+            self.move_time = 0
+        self.move_time += self.game.dt
+
+
+        return
+
         goal = self.next_step()
         newpos = self.position + (self.velocity + goal)
 
