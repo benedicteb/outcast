@@ -190,7 +190,6 @@ class NPC(Person):
             self.target,
             self.world.board == 'g',
         )
-        print "MAKE FANCY MAZE STUFF!"
         self.path = maze.solve(10)
 
     def update(self):
