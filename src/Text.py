@@ -33,6 +33,8 @@ class TextDialog(object):
         # Get first page
         self.next_page()
 
+        self.game.text_dialog = self
+
     def next_page(self):
         """
         Renders the next page of text. If None is returned there is no more text

@@ -67,8 +67,8 @@ class Game:
         ]
 
         self.npcs = [
-            NPC([0, 1], game=self, world=self.world),
-            NPC([0, 2], game=self, world=self.world),
+            NPC([0, 1], game=self, world=self.world, dialog="Hello, there!"),
+            NPC([0, 2], game=self, world=self.world, dialog="My my, this is fancy!"),
         ]
 
         self.text_dialog = None
@@ -96,9 +96,22 @@ class Game:
                         self.player.speed_up([0, -1])
                     elif event.key == K_s:
                         self.player.speed_up([0, 1])
-                if event.key == K_e and self.text_dialog:
-                    if not self.text_dialog.next_page():
-                        self.text_dialog = None
+                if event.key == K_e:
+                    if self.text_dialog:
+                        if not self.text_dialog.next_page():
+                            self.text_dialog = None
+
+                            if self.player.interacting_with:
+                                self.player.interacting_with = None
+                                continue
+
+                    for npc in self.npcs:
+                        for ds in [[1, 0], [-1, 0], [0, 1], [0, -1]]:
+                            if (npc.position == self.player.position + ds).all():
+                                if not self.player.interacting_with and not self.text_dialog:
+                                    npc.interact()
+                                    self.player.interacting_with = npc
+
             elif event.type == KEYUP:
                 if event.key in (K_a, K_d, K_w, K_s) and not self.text_dialog:
                     if event.key == K_a:
@@ -116,9 +129,9 @@ class Game:
                 self.player.give_item(self.placables.pop(self.placables.index(item)))
 
                 if not item.name.lower() == "page":
-                    self.text_dialog = TextDialog("You got the %s!" % item.name, self)
+                    TextDialog("You got the %s!" % item.name, self)
                 else:
-                    self.text_dialog = TextDialog(item.text, self)
+                    TextDialog(item.text, self)
 
         self.player.update()
 

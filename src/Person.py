@@ -9,6 +9,7 @@ import logging
 
 from Placeable import Placeable
 from Item import Item
+from Text import TextDialog
 
 DEFAULT_HEALTH = 100
 
@@ -70,6 +71,7 @@ class Player(Person):
     """
     def __init__(self, position, game, world, health=DEFAULT_HEALTH):
         super(Player, self).__init__(position, game, world, "player", health)
+        self.interacting_with = None
 
     def update(self):
         if self.game.text_dialog:
@@ -90,8 +92,9 @@ class NPC(Person):
     """
     Contains a character controlled by the game.
     """
-    def __init__(self, position, game, world, health=DEFAULT_HEALTH):
+    def __init__(self, position, game, world, health=DEFAULT_HEALTH, dialog=None):
         super(NPC, self).__init__(position, game, world, "npc", health)
+        self.dialog = dialog
 
     def next_step(self):
         """
@@ -166,8 +169,11 @@ class NPC(Person):
         # Do the actual moving
         super(NPC, self).update()
 
-    def interact():
+    def interact(self):
         """
         Called when player interacts with this NPC.
         """
-        pass
+        if not self.dialog:
+            return
+
+        TextDialog(self.dialog, self.game)
