@@ -28,9 +28,9 @@ class Maze():
         self.forward([self.start])
 
         if np.isinf(self.currentBest):
-            return -1
+            return None
         else:
-            return self.currentBest - 1, self.currentBestSnake[1:]
+            return self.currentBestSnake[1:]
 
 
     def forward(self, snake):
