@@ -7,7 +7,7 @@ Usage:
 
 from setuptools import setup
 
-APP = ['MagicExplorer.py']
+APP = ['outcast.py']
 DATA_FILES = ['sprites/grass.png', 'sprites/tree.png', 'sprites/axe.png',
 'sprites/player.png', 'sprites/npc.png', 'sprites/water.png',
 'sprites/boat.png', 'sprites/page.png', 'sprites/text_prompt.png',
