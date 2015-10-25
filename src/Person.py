@@ -10,6 +10,7 @@ import logging
 from Placeable import Placeable
 from Item import Item
 from Text import TextDialog
+from FindPath import Maze
 
 DEFAULT_HEALTH = 100
 
@@ -110,6 +111,8 @@ class NPC(Person):
 
         for item in items:
             self.give_item(item)
+        self.set_target()
+        self.set_path()
 
     def next_step(self):
         """
@@ -161,28 +164,68 @@ class NPC(Person):
 
         return np.asarray([0, 0])
 
+    def set_target(self):
+        idealtarget = self.position + (self.position - self.game.player.position)
+
+        for r in xrange(10):
+            possibilities = []
+            for x in xrange(-r, r+1):
+                for y in xrange(-r, r+1):
+                    target = idealtarget + [x, y]
+                    inside_x = 0 <= target[0] < self.world.shape[0]
+                    inside_y = 0 <= target[1] < self.world.shape[1]
+                    if (inside_x and inside_y):
+                        on_walkable = self.world.board[tuple(target)] in ('g')
+                        if on_walkable:
+                            possibilities.append(target)
+            if not possibilities:
+                continue
+            else:
+                self.target = possibilities[np.random.randint(0, len(possibilities))]
+                break
+
+    def set_path(self):
+        maze = Maze(
+            self.position,
+            self.target,
+            self.world.board == 'g',
+        )
+        self.path = maze.solve(10)
+
     def update(self):
         """
         """
-        goal = self.next_step()
-        newpos = self.position + (self.velocity + goal)
+        # Only walk after certain cooldown
+        cooldown_passed = self.move_time > self.move_cool
+        if cooldown_passed:
+            if not self.path:  # if empty or None
+                self.set_target()
+                self.set_path()
+            if self.path:
+                self.position = self.path.pop(0)
+                self.move_time = 0
+            else:
+                goal = self.next_step()
+                newpos = self.position + (self.velocity + goal)
 
-        # If next is water, try turn
-        is_water = self.world.board[tuple(newpos)] == 'w'
-        if is_water:
-            self.velocity = np.asarray([0, 0])
+                # If next is water, try turn
+                is_water = self.world.board[tuple(newpos)] == 'w'
+                if is_water:
+                    self.velocity = np.asarray([0, 0])
 
-        # If at end of world, move
-        at_yend = self.position[0] == (self.world.shape[0] - 1)
-        at_xend = self.position[1] == (self.world.shape[1] - 1)
-        if at_yend or at_xend:
-            self.velocity = np.asarray([0, 0])
+                # If at end of world, move
+                at_yend = self.position[0] == (self.world.shape[0] - 1)
+                at_xend = self.position[1] == (self.world.shape[1] - 1)
+                if at_yend or at_xend:
+                    self.velocity = np.asarray([0, 0])
 
-        if (self.velocity == [0, 0]).all():
-            self.speed_up(goal)
+                if (self.velocity == [0, 0]).all():
+                    self.speed_up(goal)
 
-        # Do the actual moving
-        super(NPC, self).update()
+                # Do the actual moving
+                super(NPC, self).update()
+
+        self.move_time += self.game.dt
 
     def interact(self):
         """
