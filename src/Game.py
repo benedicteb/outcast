@@ -99,7 +99,7 @@ class Game:
 
         self.placables = [
             Item("Axe", position=[53, 16]),
-            # Item("Boat", position=[2, 3]),
+            Item("Boat", position=[14, 63]),
             Page(PAGE1, position=[19, 11]),
             Page(PAGE2, position=[26, 16]),
             Page(PAGE3, position=[61, 12]),
