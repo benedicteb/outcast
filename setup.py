@@ -11,7 +11,8 @@ APP = ['MagicExplorer.py']
 DATA_FILES = ['sprites/grass.png', 'sprites/tree.png', 'sprites/axe.png',
 'sprites/player.png', 'sprites/npc.png', 'sprites/water.png',
 'sprites/boat.png', 'sprites/page.png', 'sprites/text_prompt.png',
-'worlds/real_world.board', 'worlds/firstworld.board']
+'worlds/real_world.board', 'worlds/firstworld.board', 'fonts/Canterbury.ttf',
+'fonts/Monospace.ttf']
 OPTIONS = {'argv_emulation': True, 'packages': ['pygame', 'numpy']}
 
 setup(
