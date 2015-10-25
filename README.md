@@ -24,6 +24,10 @@ avoid you and if they speak they speak rudely to you.
 Did you do something to them in the past? The only solution is to find the rest
 of the journal and find out what went down on this island.
 
+## Screenshots
+
+![A screenshot.](https://github.com/benedicteb/outcast/blob/master/screenshots/sonengamenjamdisplay.png "Screenshot")
+
 ## Instructions
 
 You move with A-W-S-D and communicate with the inhabitants with E.
