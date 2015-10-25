@@ -9,41 +9,50 @@ from Person import Player, NPC
 from Item import Item, Page
 from Text import TextDialog
 
-PAGE1="""The others stay away from me. I am no longer welcome anywhere. Even
+PAGE1="""Page 1:
+The others stay away from me. I am no longer welcome anywhere. Even
 though what I did was horrible, the punishment feels much, much worse. Don't
 they realise that I grieve as well?"""
 
-PAGE2="""The plains are green, everything is green. Except the ocean
+PAGE2="""Page 2:
+The plains are green, everything is green. Except the ocean
 surrounding our island. It hasn't always been like this. It's my fault, why
 wasn't I more careful?"""
 
-PAGE3="""Once this island housed a huge city. Technology was everywhere. The
+PAGE3="""Page 3:
+Once this island housed a huge city. Technology was everywhere. The
 kingdom was filled with prosperity and everyone were kind to each other. The
 trouble started when an ancient burial ground revealed a giant underground cave
 system."""
 
-PAGE4="""With our technology we delved, we delved deep and deep into the caves. Where the
+PAGE4="""Page 4:
+With our technology we delved, we delved deep and deep into the caves. Where the
 caves stopped, we found an altar. The altar had a scroll of text. Both the altar
 and the scroll was brought to the surface."""
 
-PAGE5="""I was part of the team of scientists tasked with decrypting the scroll. It was
+PAGE5="""Page 5:
+I was part of the team of scientists tasked with decrypting the scroll. It was
 some remnant of an ancient civilization living here before us. The decrypting
 took a long time."""
 
-PAGE6="""At last, we did it. The scroll told of magic. It had complex diagrams and
+PAGE6="""Page 6.
+At last, we did it. The scroll told of magic. It had complex diagrams and
 formulas. Diagrams showing how to wave your arms, and text describing how to
 pronounce incantations. Most of us thought it to be superstition."""
 
-PAGE7="""The magic works! Just for fun I tried some of the instructions the
+PAGE7="""Page 7:
+The magic works! Just for fun I tried some of the instructions the
 scroll told of. Suddenly a fireball erupted from my hand. The research academy
 burned down."""
 
-PAGE8="""People are worried. The news has spread for some time now. Everyone wants to
+PAGE8="""Page 8:
+People are worried. The news has spread for some time now. Everyone wants to
 hide this scroll, back where it was found. I'm trying to convince to don't.
 Imagine the wonders this can do for our civilization. We can be even greater
 than we already are!"""
 
-PAGE9="""In my folly I continued to play with fireballs. Today I hit the town
+PAGE9="""Page 9:
+In my folly I continued to play with fireballs. Today I hit the town
 cathedral - the biggest tribute to our civilization! It burned down, everything
 burnt down.  The fire spread so fast, it is not natural. They have abandoned me
 now, on the outskirts of town. I am never to show my face again. I have ruined
@@ -97,8 +106,18 @@ class Game:
         ]
 
         self.npcs = [
-            NPC([58, 21], game=self, world=self.world, dialog="This is a page. Maybe you'll learn something, douche.",
+            NPC([72, 58], game=self, world=self.world, dialog="This is a page. Maybe you'll learn something, douche.",
                 items=[Page(PAGE4, position=None)]),
+            NPC([34, 74], game=self, world=self.world, dialog="This is a page. Maybe you'll learn something, douche.",
+                items=[Page(PAGE5, position=None)]),
+            NPC([63, 84], game=self, world=self.world, dialog="This is a page. Maybe you'll learn something, douche.",
+                items=[Page(PAGE6, position=None)]),
+            NPC([25, 32], game=self, world=self.world, dialog="This is a page. Maybe you'll learn something, douche.",
+                items=[Page(PAGE7, position=None)]),
+            NPC([57, 37], game=self, world=self.world, dialog="This is a page. Maybe you'll learn something, douche.",
+                items=[Page(PAGE8, position=None)]),
+            NPC([31, 51], game=self, world=self.world, dialog="This is a page. Maybe you'll learn something, douche.",
+                items=[Page(PAGE9, position=None)]),
             # NPC([0, 2], game=self, world=self.world, dialog="My my, this is fancy!"),
         ]
 
