@@ -65,20 +65,6 @@ class Person(Placeable):
         """
         self.velocity += speed_vector
 
-class Player(Person):
-    """
-    Contains the player-controlled character.
-    """
-    def __init__(self, position, game, world, health=DEFAULT_HEALTH):
-        super(Player, self).__init__(position, game, world, "player", health)
-        self.interacting_with = None
-
-    def update(self):
-        if self.game.text_dialog:
-            self.velocity = np.asarray([0, 0])
-
-        super(Player, self).update()
-
     def give_item(self, item):
         if not isinstance(item, Item):
             logging.error(
@@ -88,13 +74,42 @@ class Player(Person):
 
         self.inventory.append(item)
 
+class Player(Person):
+    """
+    Contains the player-controlled character.
+    """
+    def __init__(self, position, game, world, health=DEFAULT_HEALTH):
+        super(Player, self).__init__(position, game, world, "player", health)
+        self.interacting_with = None
+
+    def update(self):
+        if len(self.game.text_dialog_queue) != 0:
+            self.velocity = np.asarray([0, 0])
+
+        super(Player, self).update()
+
+    def give_item(self, item):
+        """
+        Player reads pages if they are picked up.
+        """
+        super(Player, self).give_item(item)
+
+        TextDialog("You got %s!" % item.name.lower(), self.game)
+
+        if item.name == "Page":
+            TextDialog(item.text, self.game)
+
 class NPC(Person):
     """
     Contains a character controlled by the game.
     """
-    def __init__(self, position, game, world, health=DEFAULT_HEALTH, dialog=None):
+    def __init__(self, position, game, world, health=DEFAULT_HEALTH,
+            dialog=None, items=[]):
         super(NPC, self).__init__(position, game, world, "npc", health)
         self.dialog = dialog
+
+        for item in items:
+            self.give_item(item)
 
     def next_step(self):
         """
@@ -177,3 +192,7 @@ class NPC(Person):
             return
 
         TextDialog(self.dialog, self.game)
+        self.dialog = "I have nothing more to tell you."
+
+        for i in range(len(self.inventory)):
+            self.game.player.give_item(self.inventory.pop(i))

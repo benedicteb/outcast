@@ -33,7 +33,7 @@ class TextDialog(object):
         # Get first page
         self.next_page()
 
-        self.game.text_dialog = self
+        self.game.text_dialog_queue.append(self)
 
     def next_page(self):
         """

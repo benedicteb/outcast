@@ -6,6 +6,7 @@ Things that goes on top of the landscape.
 import numpy as np
 import os
 import pygame
+import logging
 
 import Game
 

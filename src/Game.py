@@ -18,6 +18,9 @@ curse."""
 PAGE3="""Then one day a beautiful prince approached the king. He told him that
 he had learned from a fairy how to bewitchment could be dissolved. He just had
 to build a ship that could fly, swim and also run on land."""
+PAGE4="""The king said: Building this vehicle would require a thousand men and
+excellent leadership. If they were going to pull that off he would need the help
+of the prince. As well as the rest of the kingdom."""
 
 class Game:
     SPRITES_LOCATION = "sprites/"
@@ -67,11 +70,12 @@ class Game:
         ]
 
         self.npcs = [
-            NPC([0, 1], game=self, world=self.world, dialog="Hello, there!"),
-            NPC([0, 2], game=self, world=self.world, dialog="My my, this is fancy!"),
+            NPC([0, 1], game=self, world=self.world, dialog="This is a page. Cherish it well!",
+                items=[Page(PAGE4, position=None)]),
+            # NPC([0, 2], game=self, world=self.world, dialog="My my, this is fancy!"),
         ]
 
-        self.text_dialog = None
+        self.text_dialog_queue = []
 
     def start(self):
         self._draw()
@@ -87,7 +91,7 @@ class Game:
                 pygame.quit()
                 sys.exit()
             elif event.type == KEYDOWN:
-                if event.key in (K_a, K_d, K_w, K_s) and not self.text_dialog:
+                if event.key in (K_a, K_d, K_w, K_s) and not len(self.text_dialog_queue) != 0:
                     if event.key == K_a:
                         self.player.speed_up([-1, 0])
                     elif event.key == K_d:
@@ -97,23 +101,23 @@ class Game:
                     elif event.key == K_s:
                         self.player.speed_up([0, 1])
                 if event.key == K_e:
-                    if self.text_dialog:
-                        if not self.text_dialog.next_page():
-                            self.text_dialog = None
+                    if len(self.text_dialog_queue) != 0:
+                        if not self.text_dialog_queue[0].next_page():
+                            del self.text_dialog_queue[0]
 
-                            if self.player.interacting_with:
+                            if self.player.interacting_with and len(self.text_dialog_queue) == 0:
                                 self.player.interacting_with = None
                                 continue
 
                     for npc in self.npcs:
                         for ds in [[1, 0], [-1, 0], [0, 1], [0, -1]]:
                             if (npc.position == self.player.position + ds).all():
-                                if not self.player.interacting_with and not self.text_dialog:
+                                if not self.player.interacting_with and not len(self.text_dialog_queue) != 0:
                                     npc.interact()
                                     self.player.interacting_with = npc
 
             elif event.type == KEYUP:
-                if event.key in (K_a, K_d, K_w, K_s) and not self.text_dialog:
+                if event.key in (K_a, K_d, K_w, K_s) and not len(self.text_dialog_queue) != 0:
                     if event.key == K_a:
                         self.player.speed_up([1, 0])
                     elif event.key == K_d:
@@ -127,11 +131,6 @@ class Game:
         for item in self.placables:
             if (self.player.position == item.position).all():
                 self.player.give_item(self.placables.pop(self.placables.index(item)))
-
-                if not item.name.lower() == "page":
-                    TextDialog("You got the %s!" % item.name, self)
-                else:
-                    TextDialog(item.text, self)
 
         self.player.update()
 
@@ -216,7 +215,7 @@ class Game:
                     [Game.STATUSBAR_OFFSET, 0])
 
         # If text dialog, draw it
-        if self.text_dialog:
-            self.text_dialog.render()
+        if len(self.text_dialog_queue) != 0:
+            self.text_dialog_queue[0].render()
 
         pygame.display.update()
