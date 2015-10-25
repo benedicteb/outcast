@@ -2,7 +2,8 @@ Outcast
 =======
 
 This is our contribution to SonenGameJam autumn 2015 we're we make a game from
-scratch over the course of one weekend.
+scratch over the course of one weekend. [Here](http://sonengamejam.org/) is some
+more information about this event.
 
 Our game is a zelda-style top-down 2d-adventuregame where the goal is to
 discover your past. You do this by gathering pages from a journal that you
