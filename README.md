@@ -1,7 +1,7 @@
 Outcast
 =======
 
-This is our contribution to SonenGameJam autumn 2015 we're we make a game from
+This is our contribution to SonenGameJam autumn 2015 where we make a game from
 scratch over the course of one weekend. [Here](http://sonengamejam.org/) is some
 more information about this event.
 
