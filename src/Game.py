@@ -54,24 +54,24 @@ class Game:
             self.width, self.height
         ))
         pygame.display.set_caption('Testing')
-        self.world = World(open("worlds/firstworld.board", 'r'))
+        self.world = World(open("worlds/real_world.board", 'r'))
         self.world.game = self
 
-        self.player = Player([0, 0], game=self, world=self.world)
+        self.player = Player([11, 11], game=self, world=self.world)
         # self.world.add(self.player)
         # self.world.add(Planet([200,200], 500, 30))
 
         self.placables = [
-            Item("Axe", position=[10, 3]),
-            Item("Boat", position=[2, 3]),
-            Page(PAGE1, position=[20, 3]),
-            Page(PAGE2, position=[21, 3]),
-            Page(PAGE3, position=[22, 3]),
+            # Item("Axe", position=[10, 3]),
+            # Item("Boat", position=[2, 3]),
+            Page(PAGE1, position=[72, 13]),
+            # Page(PAGE2, position=[21, 3]),
+            # Page(PAGE3, position=[22, 3]),
         ]
 
         self.npcs = [
-            NPC([0, 1], game=self, world=self.world, dialog="This is a page. Cherish it well!",
-                items=[Page(PAGE4, position=None)]),
+            # NPC([0, 1], game=self, world=self.world, dialog="This is a page. Cherish it well!",
+            #     items=[Page(PAGE4, position=None)]),
             # NPC([0, 2], game=self, world=self.world, dialog="My my, this is fancy!"),
         ]
 
