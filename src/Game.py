@@ -9,18 +9,45 @@ from Person import Player, NPC
 from Item import Item, Page
 from Text import TextDialog
 
-# Just some dummy text
-PAGE1="""A long time ago, in a galaxy far far away. There once was a princess
-called Rapunzel. She had been bewitched by an evil wizard."""
-PAGE2="""When she grew up she wanted to be rid of the curse. However even though
-the king summoned every wizard and witch in the kingdom, none could dissolve the
-curse."""
-PAGE3="""Then one day a beautiful prince approached the king. He told him that
-he had learned from a fairy how to bewitchment could be dissolved. He just had
-to build a ship that could fly, swim and also run on land."""
-PAGE4="""The king said: Building this vehicle would require a thousand men and
-excellent leadership. If they were going to pull that off he would need the help
-of the prince. As well as the rest of the kingdom."""
+PAGE1="""The others stay away from me. I am no longer welcome anywhere. Even
+though what I did was horrible, the punishment feels much, much worse. Don't
+they realise that I grieve as well?"""
+
+PAGE2="""The plains are green, everything is green. Except the ocean
+surrounding our island. It hasn't always been like this. It's my fault, why
+wasn't I more careful?"""
+
+PAGE3="""Once this island housed a huge city. Technology was everywhere. The
+kingdom was filled with prosperity and everyone were kind to each other. The
+trouble started when an ancient burial ground revealed a giant underground cave
+system."""
+
+PAGE4="""With our technology we delved, we delved deep and deep into the caves. Where the
+caves stopped, we found an altar. The altar had a scroll of text. Both the altar
+and the scroll was brought to the surface."""
+
+PAGE5="""I was part of the team of scientists tasked with decrypting the scroll. It was
+some remnant of an ancient civilization living here before us. The decrypting
+took a long time."""
+
+PAGE6="""At last, we did it. The scroll told of magic. It had complex diagrams and
+formulas. Diagrams showing how to wave your arms, and text describing how to
+pronounce incantations. Most of us thought it to be superstition."""
+
+PAGE7="""The magic works! Just for fun I tried some of the instructions the
+scroll told of. Suddenly a fireball erupted from my hand. The research academy
+burned down."""
+
+PAGE8="""People are worried. The news has spread for some time now. Everyone wants to
+hide this scroll, back where it was found. I'm trying to convince to don't.
+Imagine the wonders this can do for our civilization. We can be even greater
+than we already are!"""
+
+PAGE9="""In my folly I continued to play with fireballs. Today I hit the town
+cathedral - the biggest tribute to our civilization! It burned down, everything
+burnt down.  The fire spread so fast, it is not natural. They have abandoned me
+now, on the outskirts of town. I am never to show my face again. I have ruined
+everything."""
 
 class Game:
     SPRITES_LOCATION = "sprites/"
