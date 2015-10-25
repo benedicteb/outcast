@@ -89,16 +89,16 @@ class Game:
         # self.world.add(Planet([200,200], 500, 30))
 
         self.placables = [
-            # Item("Axe", position=[10, 3]),
+            Item("Axe", position=[53, 16]),
             # Item("Boat", position=[2, 3]),
-            Page(PAGE1, position=[72, 13]),
-            # Page(PAGE2, position=[21, 3]),
-            # Page(PAGE3, position=[22, 3]),
+            Page(PAGE1, position=[19, 11]),
+            Page(PAGE2, position=[26, 16]),
+            Page(PAGE3, position=[61, 12]),
         ]
 
         self.npcs = [
-            # NPC([0, 1], game=self, world=self.world, dialog="This is a page. Cherish it well!",
-            #     items=[Page(PAGE4, position=None)]),
+            NPC([58, 21], game=self, world=self.world, dialog="This is a page. Maybe you'll learn something, douche.",
+                items=[Page(PAGE4, position=None)]),
             # NPC([0, 2], game=self, world=self.world, dialog="My my, this is fancy!"),
         ]
 
