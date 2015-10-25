@@ -66,7 +66,7 @@ class Game:
     INV_SPACE = 5
     INV_WIDTH = 20
     INV_HEIGHT = 20
-    INV_ROWS = 4
+    INV_ROWS = 15
     INV_COLS = 4
 
     def __init__(self):
