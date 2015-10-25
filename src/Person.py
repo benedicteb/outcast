@@ -167,7 +167,7 @@ class NPC(Person):
     def set_target(self):
         idealtarget = self.position + (self.position - self.game.player.position)
 
-        for r in xrange(10):
+        for r in xrange(30):
             possibilities = []
             for x in xrange(-r, r+1):
                 for y in xrange(-r, r+1):
@@ -190,6 +190,7 @@ class NPC(Person):
             self.target,
             self.world.board == 'g',
         )
+        print "MAKE FANCY MAZE STUFF!"
         self.path = maze.solve(10)
 
     def update(self):
