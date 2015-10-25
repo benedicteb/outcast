@@ -165,7 +165,11 @@ class NPC(Person):
         return np.asarray([0, 0])
 
     def set_target(self):
-        idealtarget = self.position + (self.position - self.game.player.position)
+        change = (self.position - self.game.player.position)
+        if change.sum() <= 10:
+            idealtarget = self.position + (self.position - self.game.player.position)
+        else:
+            idealtarget = self.position + np.random.randint(-3, 3+1, size=2)
 
         for r in xrange(30):
             possibilities = []
