@@ -158,7 +158,7 @@ class NPC(Person):
             self.target,
             self.world.board == 'g',
         )
-        self.path = maze.solve(20)[1]
+        self.path = maze.solve(10)
 
     def update(self):
         """
@@ -166,35 +166,34 @@ class NPC(Person):
         # Only walk after certain cooldown
         cooldown_passed = self.move_time > self.move_cool
         if cooldown_passed:
-            if len(self.path) == 0:
+            if not self.path:  # if not empty or None
                 self.set_target()
                 self.set_path()
-            self.position = self.path.pop(0)
-            self.move_time = 0
+            if not self.path is None:
+                self.position = self.path.pop(0)
+                self.move_time = 0
+            else:
+                goal = self.next_step()
+                newpos = self.position + (self.velocity + goal)
+
+                # If next is water, try turn
+                is_water = self.world.board[tuple(newpos)] == 'w'
+                if is_water:
+                    self.velocity = np.asarray([0, 0])
+
+                # If at end of world, move
+                at_yend = self.position[0] == (self.world.shape[0] - 1)
+                at_xend = self.position[1] == (self.world.shape[1] - 1)
+                if at_yend or at_xend:
+                    self.velocity = np.asarray([0, 0])
+
+                if (self.velocity == [0, 0]).all():
+                    self.speed_up(goal)
+
+                # Do the actual moving
+                super(NPC, self).update()
+
         self.move_time += self.game.dt
-
-
-        return
-
-        goal = self.next_step()
-        newpos = self.position + (self.velocity + goal)
-
-        # If next is water, try turn
-        is_water = self.world.board[tuple(newpos)] == 'w'
-        if is_water:
-            self.velocity = np.asarray([0, 0])
-
-        # If at end of world, move
-        at_yend = self.position[0] == (self.world.shape[0] - 1)
-        at_xend = self.position[1] == (self.world.shape[1] - 1)
-        if at_yend or at_xend:
-            self.velocity = np.asarray([0, 0])
-
-        if (self.velocity == [0, 0]).all():
-            self.speed_up(goal)
-
-        # Do the actual moving
-        super(NPC, self).update()
 
     def interact():
         """
