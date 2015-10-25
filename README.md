@@ -1,5 +1,5 @@
-MagicExplorer
-=============
+Outcast
+=======
 
 This is our contribution to SonenGameJam autumn 2015 we're we make a game from
 scratch over the course of one weekend.
