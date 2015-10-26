@@ -13,6 +13,8 @@ from Text import TextDialog
 from FindPath import Maze
 
 DEFAULT_HEALTH = 100
+DEFAULT_FEAR = 75
+DEFAULT_HATE = 25
 
 class Person(Placeable):
     """
@@ -29,7 +31,7 @@ class Person(Placeable):
         self.world = world
 
         self.inventory = []
-        self.move_cool = 0.25  # seconds
+        self.move_cool = 0.10  # seconds
         self.move_time = np.inf
         self.velocity = np.array([0,0])
 
@@ -104,10 +106,15 @@ class NPC(Person):
     """
     Contains a character controlled by the game.
     """
-    def __init__(self, position, game, world, health=DEFAULT_HEALTH,
-            dialog=None, items=[]):
+    def __init__(self,
+            position, game, world, health=DEFAULT_HEALTH,
+            dialog=None, items=[],
+            fear=DEFAULT_FEAR, hate=DEFAULT_HATE,
+        ):
         super(NPC, self).__init__(position, game, world, "npc", health)
         self.dialog = dialog
+        self.fear = fear
+        self.hate = hate
 
         for item in items:
             self.give_item(item)
@@ -165,13 +172,17 @@ class NPC(Person):
         return np.asarray([0, 0])
 
     def set_target(self):
+
         change = (self.position - self.game.player.position)
-        if change.sum() <= 10:
-            idealtarget = self.position + (self.position - self.game.player.position)
+        if change.sum() <= 10 and max(self.fear, self.hate) > 50:
+            if self.fear > self.hate:
+                idealtarget = self.position + change
+            else:
+                idealtarget = self.position - change
         else:
             idealtarget = self.position + np.random.randint(-3, 3+1, size=2)
 
-        for r in xrange(30):
+        for r in xrange(10):
             possibilities = []
             for x in xrange(-r, r+1):
                 for y in xrange(-r, r+1):
@@ -235,6 +246,8 @@ class NPC(Person):
         """
         Called when player interacts with this NPC.
         """
+
+        self.fear -= 50
         if not self.dialog:
             return
 
