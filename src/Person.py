@@ -14,7 +14,7 @@ from FindPath import Maze
 
 DEFAULT_HEALTH = 100
 DEFAULT_FEAR = 75
-DEFAULT_HATE = 25
+DEFAULT_HATE = 125
 
 class Person(Placeable):
     """
@@ -45,6 +45,10 @@ class Person(Placeable):
 
             # Check if new position is on walkable place
             on_walkable = self.world.board[tuple(newpos)] in ('g')
+            if on_walkable:
+                for person in self.game.npcs + [self.game.player]:
+                    if (newpos == person.position).all():
+                        on_walkable = False
 
             # If new position is on water, must have boat
             if self.world.board[tuple(newpos)] == 'w':
