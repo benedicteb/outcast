@@ -20,6 +20,11 @@ class Person(Placeable):
     """
     Base class for all characters in game.
     """
+
+    persons = []
+    players = []
+    npcs = []
+
     def __init__(self, position, game, world, sprite, health=DEFAULT_HEALTH):
         """
         @param health The health that is given at init.
@@ -34,6 +39,11 @@ class Person(Placeable):
         self.move_cool = 0.10  # seconds
         self.move_time = np.inf
         self.velocity = np.array([0,0])
+        self._add(self)
+
+    @classmethod
+    def _add(self, p):
+        self.persons.append(p)
 
     def update(self):
         if (self.velocity != 0).any():
@@ -89,6 +99,11 @@ class Player(Person):
         super(Player, self).__init__(position, game, world, "player", health)
         self.interacting_with = None
 
+    @classmethod
+    def _add(self, p):
+        self.players.append(p)
+        self.persons.append(p)
+
     def update(self):
         if len(self.game.text_dialog_queue) != 0:
             self.velocity = np.asarray([0, 0])
@@ -124,6 +139,11 @@ class NPC(Person):
             self.give_item(item)
         self.set_target()
         self.set_path()
+
+    @classmethod
+    def _add(self, p):
+        self.persons.append(p)
+        self.npcs.append(p)
 
     def next_step(self):
         """
