@@ -91,6 +91,20 @@ class Person(Placeable):
         """
         self.velocity += speed_vector
 
+    def hurt(self, dmg):
+        self.health -= dmg
+        if self.health <= 0:
+            self.health = 0
+            self._die()
+
+    def _die(self):
+        self.dialog = "I died."
+        self.update = self._update_dead
+
+    def _update_dead(self):
+        # Cannot do anything when dead.
+        pass
+
     def give_item(self, item):
         if not isinstance(item, Item):
             logging.error(
