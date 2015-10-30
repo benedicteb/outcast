@@ -22,6 +22,7 @@ class World:
         self.sprites = {
             'g': pygame.image.load('sprites/grass.png').convert(),
             'w': pygame.image.load('sprites/water.png').convert(),
+            't': pygame.image.load('sprites/tree.png').convert(),
         }
 
 
