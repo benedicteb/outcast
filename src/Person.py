@@ -46,6 +46,8 @@ class Person(Placeable):
         self.persons.append(p)
 
     def update(self):
+        if len(self.game.text_dialog_queue) > 0:
+            return
         if (self.velocity != 0).any():
             newpos = self.position + self.velocity
             self.move(newpos)
@@ -110,12 +112,6 @@ class Player(Person):
     def _add(self, p):
         self.players.append(p)
         self.persons.append(p)
-
-    def move(self, newpos):
-        if len(self.game.text_dialog_queue) != 0:
-            self.velocity = np.asarray([0, 0])
-
-        super(Player, self).move(newpos)
 
     def give_item(self, item):
         """
@@ -241,6 +237,10 @@ class NPC(Person):
     def update(self):
         """
         """
+
+        if len(self.game.text_dialog_queue) > 0:
+            return False
+
         # Only walk after certain cooldown
         cooldown_passed = self.move_time > self.move_cool
         if cooldown_passed:
