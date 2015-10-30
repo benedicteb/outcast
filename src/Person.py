@@ -48,33 +48,40 @@ class Person(Placeable):
     def update(self):
         if (self.velocity != 0).any():
             newpos = self.position + self.velocity
-
-            # Check if outside bounds of map
-            inside_x = 0 <= newpos[0] < self.world.shape[0]
-            inside_y = 0 <= newpos[1] < self.world.shape[1]
-
-            # Check if new position is on walkable place
-            on_walkable = self.world.board[tuple(newpos)] in ('g')
-            if on_walkable:
-                for person in self.game.npcs + [self.game.player]:
-                    if (newpos == person.position).all():
-                        on_walkable = False
-
-            # If new position is on water, must have boat
-            if self.world.board[tuple(newpos)] == 'w':
-                names = [item.name for item in self.inventory]
-                has_boat = 'Boat' in names
-                on_walkable = has_boat
-
-            # Only walk after certain cooldown
-            cooldown_passed = self.move_time > self.move_cool
-
-            # Check if step is valid, and if it is, move
-            if (inside_x and inside_y and on_walkable and cooldown_passed):
-                self.position = newpos
-                self.move_time = 0
-
+            self.move(newpos)
         self.move_time += self.game.dt
+
+    def move(self, newpos):
+
+        # Check if outside bounds of map
+        inside_x = 0 <= newpos[0] < self.world.shape[0]
+        inside_y = 0 <= newpos[1] < self.world.shape[1]
+
+        # Check if new position is on walkable place
+        on_walkable = self.world.board[tuple(newpos)] in ('g')
+        if on_walkable:
+            for person in Person.persons + [self.game.player]:
+                if person == self:
+                    continue  # Cannot collide with self.
+                if (newpos == person.position).all():
+                    on_walkable = False
+
+        # If new position is on water, must have boat
+        if self.world.board[tuple(newpos)] == 'w':
+            names = [item.name for item in self.inventory]
+            has_boat = 'Boat' in names
+            on_walkable = has_boat
+
+        # Only walk after certain cooldown
+        cooldown_passed = self.move_time > self.move_cool
+
+        # Check if step is valid, and if it is, move
+        if (inside_x and inside_y and on_walkable and cooldown_passed):
+            self.position = newpos
+            self.move_time = 0
+            return True
+        else:
+            return False
 
     def speed_up(self, speed_vector):
         """
@@ -104,11 +111,11 @@ class Player(Person):
         self.players.append(p)
         self.persons.append(p)
 
-    def update(self):
+    def move(self, newpos):
         if len(self.game.text_dialog_queue) != 0:
             self.velocity = np.asarray([0, 0])
 
-        super(Player, self).update()
+        super(Player, self).move(newpos)
 
     def give_item(self, item):
         """
@@ -241,9 +248,11 @@ class NPC(Person):
                 self.set_target()
                 self.set_path()
             if self.path:
-                self.position = self.path.pop(0)
+                newpos = self.path[0]
+                if self.move(newpos):  # Successfull move.
+                    del self.path[0]
                 self.move_time = 0
-            else:
+            else:  # Else backup solution.
                 goal = self.next_step()
                 newpos = self.position + (self.velocity + goal)
 
@@ -262,7 +271,8 @@ class NPC(Person):
                     self.speed_up(goal)
 
                 # Do the actual moving
-                super(NPC, self).update()
+                newpos = self.position + self.velocity
+                super(NPC, self).move(newpos)
 
         self.move_time += self.game.dt
 
