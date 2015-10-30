@@ -13,8 +13,8 @@ from Text import TextDialog
 from FindPath import Maze
 
 DEFAULT_HEALTH = 100
-DEFAULT_FEAR = 75
-DEFAULT_HATE = 125
+DEFAULT_FEAR = 0
+DEFAULT_HATE = 0
 
 class Person(Placeable):
     """
@@ -234,7 +234,7 @@ class NPC(Person):
         )
         self.path = maze.solve(10)
 
-    def update(self):
+    def update(self, depth=0):
         """
         """
 
@@ -251,6 +251,15 @@ class NPC(Person):
                 newpos = self.path[0]
                 if self.move(newpos):  # Successfull move.
                     del self.path[0]
+                elif depth >= 10:
+                    # Move was blocked by some entity.
+                    # Clear current path and try again.
+                    # Maxium depth to avoid potential infinite recursive loop.
+                    self.path = []
+                    self.update(depth+1)
+                    return
+                else:
+                    self.path = []
                 self.move_time = 0
             else:  # Else backup solution.
                 goal = self.next_step()
