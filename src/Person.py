@@ -55,6 +55,17 @@ class Person(Placeable):
 
     def move(self, newpos):
 
+        # Change facing direction
+        change = newpos - self.position
+        if change[1] > 0:
+            self.facing = 0
+        elif change[0] > 0:
+            self.facing = 1
+        elif change[1] < 0:
+            self.facing = 2
+        elif change[0] < 0:
+            self.facing = 3
+
         # Check if outside bounds of map
         inside_x = 0 <= newpos[0] < self.world.shape[0]
         inside_y = 0 <= newpos[1] < self.world.shape[1]
