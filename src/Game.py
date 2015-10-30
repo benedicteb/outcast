@@ -209,7 +209,7 @@ class Game:
 
 
         self.screen.blit(
-            self.player.sprite,
+            self.player.get_sprite(),
             np.array([radius, radius]) * World.METER_SIZE + [Game.STATUSBAR_OFFSET, 0],
         )
 
