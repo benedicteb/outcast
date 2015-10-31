@@ -31,16 +31,13 @@ class World:
 
         self.sprites = {
             'g': pygame.image.load(
-                Game.resource_path(os.path.join(
-					Game.Game.SPRITES_LOCATION, 'grass.png'))
+                Game.resource_path(Game.Game.SPRITES_LOCATION, 'grass.png')
             ).convert(),
             'w': pygame.image.load(
-                Game.resource_path(os.path.join(
-					Game.Game.SPRITES_LOCATION, 'water.png'))
+                Game.resource_path(Game.Game.SPRITES_LOCATION, 'water.png')
             ).convert(),
             't': pygame.image.load(
-                Game.resource_path(os.path.join(
-					Game.Game.SPRITES_LOCATION, 'tree.png'))
+                Game.resource_path(Game.Game.SPRITES_LOCATION, 'tree.png')
             ).convert(),
         }
 

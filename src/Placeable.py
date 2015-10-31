@@ -35,7 +35,7 @@ class Placeable(object):
         self.facing = 0
 
         self._sprite = pygame.image.load(Game.resource_path(
-            os.path.join(Game.Game.SPRITES_LOCATION, sprite) + Game.Game.SPRITES_EXT
+            Game.Game.SPRITES_LOCATION, sprite + Game.Game.SPRITES_EXT
         )).convert_alpha()
 
     def get_sprite(self):
