@@ -40,7 +40,9 @@ In order to travel on water you need a boat.
 Download from the [releases](https://github.com/benedicteb/outcast/releases)
 page.
 
-~~Currently we only have a precompiled OS X-version.~~ The precompiled OS X-file was no good. We are working on creating some new executables. In the meantime you have to compile from source to try the game.
+Currently we only have a precompiled Windows EXE.
+If you want to play on OS X or Linux/Unix you have to run from  the source files for now.
+There has been problems with displaying sprites correctly on OS X even when running from source.
 
 ### Compiling
 
