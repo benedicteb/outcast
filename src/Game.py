@@ -137,7 +137,7 @@ class Game:
                 pygame.quit()
                 sys.exit()
             elif event.type == KEYDOWN:
-                if event.key in (K_a, K_d, K_w, K_s) and not len(self.text_dialog_queue) != 0:
+                if event.key in (K_a, K_d, K_w, K_s):
                     if event.key == K_a:
                         self.player.speed_up([-1, 0])
                     elif event.key == K_d:
@@ -163,7 +163,7 @@ class Game:
                                     self.player.interacting_with = npc
 
             elif event.type == KEYUP:
-                if event.key in (K_a, K_d, K_w, K_s) and not len(self.text_dialog_queue) != 0:
+                if event.key in (K_a, K_d, K_w, K_s):
                     if event.key == K_a:
                         self.player.speed_up([1, 0])
                     elif event.key == K_d:
@@ -209,7 +209,7 @@ class Game:
 
 
         self.screen.blit(
-            self.player.sprite,
+            self.player.get_sprite(),
             np.array([radius, radius]) * World.METER_SIZE + [Game.STATUSBAR_OFFSET, 0],
         )
 
