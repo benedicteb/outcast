@@ -17,10 +17,10 @@ class Placeable(object):
 
     def __init__(self, position, sprite):
         """
-        Defaults to facing north. Facing codes:
-        - 0: North
+        Defaults to facing south. Facing codes:
+        - 0: South
         - 1: East
-        - 2: South
+        - 2: North
         - 3: West
 
         @param sprite name of sprite-file, no need for path nor extension.
@@ -34,21 +34,16 @@ class Placeable(object):
         self.position = np.array(position)
         self.facing = 0
 
-        self.sprite = pygame.image.load(
-            os.path.join(Game.Game.SPRITES_LOCATION, sprite) + Game.Game.SPRITES_EXT
-        ).convert_alpha()
+        self._sprite = pygame.image.load(Game.resource_path(
+            Game.Game.SPRITES_LOCATION, sprite + Game.Game.SPRITES_EXT
+        )).convert_alpha()
 
     def get_sprite(self):
         # Rotate the sprite while keeping its center and size.
-        # if self.thrust > 0:
-            # rot_image = pygame.transform.rotate(
-                # self.sprite_thrust, self.pitch*180/np.pi
-            # )
-        # else:
-            # rot_image = pygame.transform.rotate(
-                # self.sprite, self.pitch*180/np.pi
-            # )
-        # rot_rect = self.sprite.get_rect().copy()
-        # rot_rect.center = rot_image.get_rect().center
-        # rot_image = rot_image.subsurface(rot_rect).copy()
-        return self.sprite
+        rot_image = pygame.transform.rotate(
+            self._sprite, self.facing*90
+        )
+        rot_rect = self._sprite.get_rect().copy()
+        rot_rect.center = rot_image.get_rect().center
+        rot_image = rot_image.subsurface(rot_rect).copy()
+        return rot_image
