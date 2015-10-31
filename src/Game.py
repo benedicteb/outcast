@@ -58,12 +58,19 @@ burnt down.  The fire spread so fast, it is not natural. They have abandoned me
 now, on the outskirts of town. I am never to show my face again. I have ruined
 everything."""
 
+def resource_path(relative):
+    if hasattr(sys, "_MEIPASS"):
+        return os.path.join(sys._MEIPASS, relative)
+    else:
+        return os.path.join(relative)
+
 class Game:
     SPRITES_LOCATION = "sprites/"
     SPRITES_EXT = ".png"
 
-    CANTERBURY_FONT = os.path.join("fonts", "Canterbury.ttf")
-    MONOSPACE_FONT = os.path.join("fonts", "Monospace.ttf")
+    FONTS_LOCATION = "fonts/"
+    CANTERBURY_FONT = "Canterbury.ttf"
+    MONOSPACE_FONT = "Monospace.ttf"
 
     STATUSBAR_OFFSET = 120
     STATUSBAR_COLOR = (112, 112, 112)
@@ -218,7 +225,12 @@ class Game:
             Game.STATUSBAR_OFFSET, self.height), 0)
 
         # Text for statusbar
-        font = pygame.font.Font(Game.CANTERBURY_FONT, Game.STATUSBAR_FONTSIZE)
+        font = pygame.font.Font(
+            # Game.CANTERBURY_FONT,
+            resource_path(os.path.join(
+                Game.FONTS_LOCATION, Game.CANTERBURY_FONT)),
+            Game.STATUSBAR_FONTSIZE,
+        )
         label = font.render("Inventory", 1, (0, 0, 0))
         self.screen.blit(label, (Game.STATUSBAR_MARGIN, Game.STATUSBAR_MARGIN))
 
@@ -244,7 +256,12 @@ class Game:
 
         # Draw FPS
         FPS = 1. / self.dt
-        font = pygame.font.Font(Game.MONOSPACE_FONT, Game.STATUSBAR_FONTSIZE)
+        font = pygame.font.Font(
+            # Game.MONOSPACE_FONT,
+            resource_path(os.path.join(
+                Game.FONTS_LOCATION, Game.MONOSPACE_FONT)),
+            Game.STATUSBAR_FONTSIZE,
+        )
         label = font.render("FPS: %d" % FPS, 1, (255, 0, 0))
         self.screen.blit(label, (self.width - label.get_width(), 0))
 
