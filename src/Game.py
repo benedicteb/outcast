@@ -58,19 +58,19 @@ burnt down.  The fire spread so fast, it is not natural. They have abandoned me
 now, on the outskirts of town. I am never to show my face again. I have ruined
 everything."""
 
-def resource_path(relative):
-    if hasattr(sys, "_MEIPASS"):
-        return os.path.join(sys._MEIPASS, relative)
-    else:
-        return os.path.join(relative)
+def resource_path(relative_path):
+    base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 class Game:
-    SPRITES_LOCATION = "sprites/"
+    SPRITES_LOCATION = "sprites"
     SPRITES_EXT = ".png"
 
-    FONTS_LOCATION = "fonts/"
+    FONTS_LOCATION = "fonts"
     CANTERBURY_FONT = "Canterbury.ttf"
     MONOSPACE_FONT = "Monospace.ttf"
+
+    WORLDS_LOCATION = "worlds"
 
     STATUSBAR_OFFSET = 120
     STATUSBAR_COLOR = (112, 112, 112)
@@ -97,7 +97,9 @@ class Game:
             self.width, self.height
         ))
         pygame.display.set_caption('Testing')
-        self.world = World(open("worlds/real_world.board", 'r'))
+        self.world = World(open(resource_path(os.path.join(
+            Game.WORLDS_LOCATION, "real_world.board"
+        )), 'r'))
         self.world.game = self
 
         self.player = Player([11, 11], game=self, world=self.world)
