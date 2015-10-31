@@ -34,9 +34,9 @@ class Placeable(object):
         self.position = np.array(position)
         self.facing = 0
 
-        self._sprite = pygame.image.load(
-            os.path.join(Game.Game.SPRITES_LOCATION, sprite) + Game.Game.SPRITES_EXT
-        ).convert_alpha()
+        self._sprite = pygame.image.load(Game.resource_path(
+            Game.Game.SPRITES_LOCATION, sprite + Game.Game.SPRITES_EXT
+        )).convert_alpha()
 
     def get_sprite(self):
         # Rotate the sprite while keeping its center and size.
