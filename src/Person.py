@@ -64,11 +64,9 @@ class Person(Placeable):
         # Check if new position is on walkable place
         on_walkable = self.world.board[tuple(newpos)] in ('g')
         if on_walkable:
-            for person in Person.persons + [self.game.player]:
-                if person == self:
-                    continue  # Cannot collide with self.
-                if (newpos == person.position).all():
-                    on_walkable = False
+            if isinstance(self.world.pointers[tuple(newpos)], Person):
+                # Another Person is in the way.
+                on_walkable = False
 
         # If new position is on water, must have boat
         if self.world.board[tuple(newpos)] == 'w':
