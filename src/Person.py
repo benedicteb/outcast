@@ -57,7 +57,7 @@ class Person(Placeable):
 
         # Change facing direction
         change = newpos - self.position
-        self.facing = int(round(np.arctan2(change[0], change[1]) / np.pi * 2))
+        self.facing = int(round(np.arctan2(-change[1], change[0]) / np.pi * 2))
 
         # Check if outside bounds of map
         inside_x = 0 <= newpos[0] < self.world.shape[0]

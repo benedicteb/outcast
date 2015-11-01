@@ -88,6 +88,8 @@ class Game:
     INV_ROWS = 15
     INV_COLS = 4
 
+    DIRECTIONS = [[1, 0], [0, -1], [-1, 0], [0, 1], ]
+
     def __init__(self):
         self.FPS = 30
         self.dt = 1. / self.FPS
@@ -168,11 +170,12 @@ class Game:
                                 continue
 
                     for npc in self.npcs:
-                        for ds in [[1, 0], [-1, 0], [0, 1], [0, -1]]:
-                            if (npc.position == self.player.position + ds).all():
-                                if not self.player.interacting_with and not len(self.text_dialog_queue) != 0:
-                                    npc.interact()
-                                    self.player.interacting_with = npc
+                        if (npc.position == self.player.position +
+                            Game.DIRECTIONS[self.player.facing]
+                        ).all():
+                            if not self.player.interacting_with and not len(self.text_dialog_queue) != 0:
+                                npc.interact()
+                                self.player.interacting_with = npc
 
             elif event.type == KEYUP:
                 if event.key in (K_a, K_d, K_w, K_s):
