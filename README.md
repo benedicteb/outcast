@@ -1,8 +1,9 @@
-MagicExplorer
-=============
+Outcast
+=======
 
-This is our contribution to SonenGameJam autumn 2015 we're we make a game from
-scratch over the course of one weekend.
+This is our contribution to SonenGameJam autumn 2015 where we make a game from
+scratch over the course of one weekend. [Here](http://sonengamejam.org/) is some
+more information about this event.
 
 Our game is a zelda-style top-down 2d-adventuregame where the goal is to
 discover your past. You do this by gathering pages from a journal that you
@@ -24,6 +25,10 @@ avoid you and if they speak they speak rudely to you.
 Did you do something to them in the past? The only solution is to find the rest
 of the journal and find out what went down on this island.
 
+## Screenshots
+
+![A screenshot.](https://github.com/benedicteb/outcast/blob/master/screenshots/sonengamenjamdisplay.png "Screenshot")
+
 ## Instructions
 
 You move with A-W-S-D and communicate with the inhabitants with E.
@@ -35,8 +40,12 @@ In order to travel on water you need a boat.
 Download from the [releases](https://github.com/benedicteb/outcast/releases)
 page.
 
-Currently we only have a precompiled OS X-version. However you are welcome to
-clone the source, install the dependencies and run the game.
+Currently we have a precompiled executable for Windows and Linux/Unix.
+Get the zip- or tar-file, respectively, unpack, and run the executable.
+
+If you want to play on OS X you have to run from source or try to compile
+for yourself.
+There has been problems with displaying sprites correctly on OS X even when running from source.
 
 ### Compiling
 

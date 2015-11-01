@@ -58,12 +58,22 @@ burnt down.  The fire spread so fast, it is not natural. They have abandoned me
 now, on the outskirts of town. I am never to show my face again. I have ruined
 everything."""
 
+def resource_path(*pathnames):
+    relative_path = pathnames[0]
+    for pname in pathnames[1:]:
+        relative_path = os.path.join(relative_path, pname)
+    base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
 class Game:
-    SPRITES_LOCATION = "sprites/"
+    SPRITES_LOCATION = "sprites"
     SPRITES_EXT = ".png"
 
-    CANTERBURY_FONT = os.path.join("fonts", "Canterbury.ttf")
-    MONOSPACE_FONT = os.path.join("fonts", "Monospace.ttf")
+    FONTS_LOCATION = "fonts"
+    CANTERBURY_FONT = "Canterbury.ttf"
+    MONOSPACE_FONT = "Monospace.ttf"
+
+    WORLDS_LOCATION = "worlds"
 
     STATUSBAR_OFFSET = 120
     STATUSBAR_COLOR = (112, 112, 112)
@@ -90,7 +100,9 @@ class Game:
             self.width, self.height
         ))
         pygame.display.set_caption('Testing')
-        self.world = World(open("worlds/real_world.board", 'r'))
+        self.world = World(open(resource_path(
+            Game.WORLDS_LOCATION, "real_world.board"
+        ), 'r'))
         self.world.game = self
 
         self.player = Player([11, 11], game=self, world=self.world)
@@ -218,7 +230,10 @@ class Game:
             Game.STATUSBAR_OFFSET, self.height), 0)
 
         # Text for statusbar
-        font = pygame.font.Font(Game.CANTERBURY_FONT, Game.STATUSBAR_FONTSIZE)
+        font = pygame.font.Font(
+            resource_path(Game.FONTS_LOCATION, Game.CANTERBURY_FONT),
+            Game.STATUSBAR_FONTSIZE,
+        )
         label = font.render("Inventory", 1, (0, 0, 0))
         self.screen.blit(label, (Game.STATUSBAR_MARGIN, Game.STATUSBAR_MARGIN))
 
@@ -244,7 +259,11 @@ class Game:
 
         # Draw FPS
         FPS = 1. / self.dt
-        font = pygame.font.Font(Game.MONOSPACE_FONT, Game.STATUSBAR_FONTSIZE)
+        font = pygame.font.Font(
+            # Game.MONOSPACE_FONT,
+            resource_path(Game.FONTS_LOCATION, Game.MONOSPACE_FONT),
+            Game.STATUSBAR_FONTSIZE,
+        )
         label = font.render("FPS: %d" % FPS, 1, (255, 0, 0))
         self.screen.blit(label, (self.width - label.get_width(), 0))
 

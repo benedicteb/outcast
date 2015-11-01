@@ -13,8 +13,8 @@ from Text import TextDialog
 from FindPath import Maze
 
 DEFAULT_HEALTH = 100
-DEFAULT_FEAR = 0
-DEFAULT_HATE = 0
+DEFAULT_FEAR = 75
+DEFAULT_HATE = 25
 
 class Person(Placeable):
     """
