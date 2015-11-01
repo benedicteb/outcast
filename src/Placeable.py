@@ -15,7 +15,7 @@ class Placeable(object):
     Base class for Persons and Items.
     """
 
-    def __init__(self, position, sprite):
+    def __init__(self, position=None, sprite=None, game=None, world=None):
         """
         Defaults to facing south. Facing codes:
         - 0: East
@@ -25,14 +25,18 @@ class Placeable(object):
 
         @param sprite name of sprite-file, no need for path nor extension.
         """
-        if not isinstance(position, (tuple, list, np.ndarray)):
+        if not isinstance(position, (tuple, list, np.ndarray, type(None))):
             logging.error(
-                "Position should be arraylike with [x, y]. Set it to [0, 0]."
+                "Position should be arraylike with [x, y]. Set it to None."
             )
-            position = [0, 0]
+            position = None
 
         self.position = np.array(position)
         self.facing = 3
+        self.game = game
+        self.world = world
+        if not position is None:
+            world.pointers[tuple(position)] = self
 
         self._sprite = pygame.image.load(Game.resource_path(
             Game.Game.SPRITES_LOCATION, sprite + Game.Game.SPRITES_EXT

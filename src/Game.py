@@ -112,11 +112,11 @@ class Game:
         # self.world.add(Planet([200,200], 500, 30))
 
         self.placables = [
-            Item("Axe", position=[53, 16]),
-            Item("Boat", position=[14, 63]),
-            Page(PAGE1, position=[19, 11]),
-            Page(PAGE2, position=[26, 16]),
-            Page(PAGE3, position=[61, 12]),
+            Item("Axe", position=[53, 16], world=self.world),
+            Item("Boat",position=[14, 63], world=self.world),
+            Page(PAGE1, position=[19, 11], world=self.world),
+            Page(PAGE2, position=[26, 16], world=self.world),
+            Page(PAGE3, position=[61, 12], world=self.world),
         ]
 
         self.npcs = [
@@ -161,21 +161,20 @@ class Game:
                     elif event.key == K_s:
                         self.player.speed_up([0, 1])
                 if event.key == K_e:
-                    if len(self.text_dialog_queue) != 0:
+                    if len(self.text_dialog_queue) > 0:
                         if not self.text_dialog_queue[0].next_page():
                             del self.text_dialog_queue[0]
 
                             if self.player.interacting_with and len(self.text_dialog_queue) == 0:
                                 self.player.interacting_with = None
                                 continue
-
-                    for npc in self.npcs:
-                        if (npc.position == self.player.position +
-                            Game.DIRECTIONS[self.player.facing]
-                        ).all():
-                            if not self.player.interacting_with and not len(self.text_dialog_queue) != 0:
-                                npc.interact()
-                                self.player.interacting_with = npc
+                    else:
+                        target = self.player.position + \
+                                 Game.DIRECTIONS[self.player.facing]
+                        try:
+                            self.world.pointers[tuple(target)].interact()
+                        except AttributeError:
+                            pass  # Nothing to interact with.
 
             elif event.type == KEYUP:
                 if event.key in (K_a, K_d, K_w, K_s):

@@ -19,12 +19,7 @@ class World:
                 board.append(list(line.strip()))
             self.board = np.array(board).transpose()
             self.shape = self.board.shape
-        else:
-            board = real_world.split()
-            for i, line in enumerate(board):
-                board[i] = list(line.strip())
-            self.board = np.array(board).transpose()
-            self.shape = self.board.shape
+            self.pointers = np.empty(self.shape, dtype=object)
 
         self.void_color = void_color
         self.game = None

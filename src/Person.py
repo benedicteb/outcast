@@ -30,10 +30,8 @@ class Person(Placeable):
         @param health The health that is given at init.
         @param position [x, y] the position at init.
         """
-        super(Person, self).__init__(position, sprite)
+        super(Person, self).__init__(position, sprite, game, world)
         self.health = health
-        self.game = game
-        self.world = world
 
         self.inventory = []
         self.move_cool = 0.10  # seconds
@@ -83,7 +81,9 @@ class Person(Placeable):
 
         # Check if step is valid, and if it is, move
         if (inside_x and inside_y and on_walkable and cooldown_passed):
+            self.world.pointers[tuple(self.position)] = None
             self.position = newpos
+            self.world.pointers[tuple(self.position)] = self
             self.move_time = 0
             return True
         else:
