@@ -22,4 +22,4 @@ def  angle2vec(angle):
     """
     x =  np.cos(angle * np.pi / 2)
     y = -np.sin(angle * np.pi / 2)  # Negatice becaue map is "upside down".
-    return np.array([x, y])
+    return np.array([x, y], dtype='int8')
