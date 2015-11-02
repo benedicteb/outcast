@@ -1,15 +1,22 @@
+"""
+Contains generic methods that might be used by several different modules.
+Is not intended to contain any classes.
+Reccomended to be imported like this: 'import Functions as func'
+Then do, f.ex. func.vec2angle([-1,0])
+"""
+
 import numpy as np
 
 
-def  dir2angle(direction):
+def  vec2angle(vec):
     """Takes a direction vector, f.ex. [-1,0] as input and
     returns a facing code, f.ex 2.
     """
-    angle = int(round(np.arctan2(-direction[1], direction[0]) / np.pi * 2))
+    angle = int(round(np.arctan2(-vec[1], vec[0]) / np.pi * 2))
     return angle
 
 
-def  angle2dir(angle):
+def  angle2vec(angle):
     """Takes a facing code, f.ex. 2 as input and
     returns a direction vector, f.ex. [-1,0].
     """
