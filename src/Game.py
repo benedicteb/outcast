@@ -111,11 +111,11 @@ class Game:
         # self.world.add(Planet([200,200], 500, 30))
 
         self.placables = [
-            Item("Axe", position=[53, 16], world=self.world),
-            Item("Boat",position=[14, 63], world=self.world),
-            Page(PAGE1, position=[19, 11], world=self.world),
-            Page(PAGE2, position=[26, 16], world=self.world),
-            Page(PAGE3, position=[61, 12], world=self.world),
+            Item("Axe", position=[53, 16], game=self, world=self.world),
+            Item("Boat",position=[14, 63], game=self, world=self.world),
+            Page(PAGE1, position=[19, 11], game=self, world=self.world),
+            Page(PAGE2, position=[26, 16], game=self, world=self.world),
+            Page(PAGE3, position=[61, 12], game=self, world=self.world),
         ]
 
         self.npcs = [
