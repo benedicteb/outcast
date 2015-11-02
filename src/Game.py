@@ -8,6 +8,7 @@ from World import World
 from Person import Player, NPC
 from Item import Item, Page
 from Text import TextDialog
+import Functions as func
 
 PAGE1="""Page 1:
 The others stay away from me. I am no longer welcome anywhere. Even
@@ -87,8 +88,6 @@ class Game:
     INV_HEIGHT = 20
     INV_ROWS = 15
     INV_COLS = 4
-
-    DIRECTIONS = [[1, 0], [0, -1], [-1, 0], [0, 1], ]
 
     def __init__(self):
         self.FPS = 30
@@ -170,7 +169,7 @@ class Game:
                                 continue
                     else:
                         target = self.player.position + \
-                                 Game.DIRECTIONS[self.player.facing]
+                                 func.angle2vec(self.player.facing)
                         try:
                             self.world.pointers[tuple(target)].interact()
                         except AttributeError:

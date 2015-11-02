@@ -20,6 +20,6 @@ def  angle2vec(angle):
     """Takes a facing code, f.ex. 2 as input and
     returns a direction vector, f.ex. [-1,0].
     """
-    x = np.cos(angle * np.pi / 2)
-    y = np.sin(angle * np.pi / 2)
+    x =  np.cos(angle * np.pi / 2)
+    y = -np.sin(angle * np.pi / 2)  # Negatice becaue map is "upside down".
     return np.array([x, y])

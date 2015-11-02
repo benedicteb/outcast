@@ -11,6 +11,7 @@ from Placeable import Placeable
 from Item import Item, Page
 from Text import TextDialog
 from FindPath import Maze
+import Functions as func
 
 DEFAULT_HEALTH = 100
 DEFAULT_FEAR = 75
@@ -55,7 +56,7 @@ class Person(Placeable):
 
         # Change facing direction
         change = newpos - self.position
-        self.facing = int(round(np.arctan2(-change[1], change[0]) / np.pi * 2))
+        self.facing = func.vec2angle(change)
 
         # Check if outside bounds of map
         inside_x = 0 <= newpos[0] < self.world.shape[0]
