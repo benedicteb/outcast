@@ -89,6 +89,13 @@ class Game:
     INV_ROWS = 15
     INV_COLS = 4
 
+    keymap = {
+        K_d : func.angle2vec(0),
+        K_w : func.angle2vec(1),
+        K_a : func.angle2vec(2),
+        K_s : func.angle2vec(3),
+    }
+
     def __init__(self):
         self.FPS = 30
         self.dt = 1. / self.FPS
@@ -150,16 +157,9 @@ class Game:
                 pygame.quit()
                 sys.exit()
             elif event.type == KEYDOWN:
-                if event.key in (K_a, K_d, K_w, K_s):
-                    if event.key == K_a:
-                        self.player.speed_up([-1, 0])
-                    elif event.key == K_d:
-                        self.player.speed_up([1, 0])
-                    elif event.key == K_w:
-                        self.player.speed_up([0, -1])
-                    elif event.key == K_s:
-                        self.player.speed_up([0, 1])
-                if event.key == K_e:
+                if event.key in Game.keymap.keys():
+                    self.player.speed_up(Game.keymap[event.key])
+                elif event.key == K_e:
                     if len(self.text_dialog_queue) > 0:
                         if not self.text_dialog_queue[0].next_page():
                             del self.text_dialog_queue[0]
@@ -176,15 +176,8 @@ class Game:
                             pass  # Nothing to interact with.
 
             elif event.type == KEYUP:
-                if event.key in (K_a, K_d, K_w, K_s):
-                    if event.key == K_a:
-                        self.player.speed_up([1, 0])
-                    elif event.key == K_d:
-                        self.player.speed_up([-1, 0])
-                    elif event.key == K_w:
-                        self.player.speed_up([0, 1])
-                    elif event.key == K_s:
-                        self.player.speed_up([0, -1])
+                if event.key in Game.keymap.keys():
+                    self.player.speed_up(- Game.keymap[event.key])
 
         # If player steps on item, give it to player
         for item in self.placables:
