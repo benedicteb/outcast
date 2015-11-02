@@ -8,7 +8,7 @@ import pygame
 import logging
 
 from Placeable import Placeable
-from Item import Item
+from Item import Item, Page
 from Text import TextDialog
 from FindPath import Maze
 
@@ -137,7 +137,7 @@ class Player(Person):
 
         TextDialog("You got %s!" % item.name.lower(), self.game)
 
-        if item.name == "Page":
+        if isinstance(item, Page):
             TextDialog(item.text, self.game)
 
 class NPC(Person):
