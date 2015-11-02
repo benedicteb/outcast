@@ -27,7 +27,6 @@ class TextDialog(object):
         self.printed_to = 0
 
         self.font = pygame.font.Font(
-            # Game.MONOSPACE_FONT,
             Game.resource_path(os.path.join(
                 Game.Game.FONTS_LOCATION, Game.Game.MONOSPACE_FONT)),
             12,

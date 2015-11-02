@@ -114,8 +114,6 @@ class Game:
         self.world.game = self
 
         self.player = Player([11, 11], game=self, world=self.world)
-        # self.world.add(self.player)
-        # self.world.add(Planet([200,200], 500, 30))
 
         self.placables = [
             Item("Axe", position=[53, 16], game=self, world=self.world),
@@ -138,7 +136,6 @@ class Game:
                 items=[Page(PAGE8, position=None)]),
             NPC([31, 51], game=self, world=self.world, dialog="This is a page. Maybe you'll learn something, douche.",
                 items=[Page(PAGE9, position=None)]),
-            # NPC([0, 2], game=self, world=self.world, dialog="My my, this is fancy!"),
         ]
 
         self.text_dialog_queue = []
@@ -149,7 +146,6 @@ class Game:
             self._update()
             self._draw()
             self.dt = self.clock.tick(self.FPS) * 0.001
-            # print self.clock.get_fps()
 
     def _update(self):
         for event in pygame.event.get(): # event handling loop
@@ -205,8 +201,7 @@ class Game:
                         raise IndexError
                     key = board[tuple(ij + playpos)]
                 except IndexError:
-                    # Outside of board.
-                    continue
+                    continue  # Outside of board.
 
                 self.screen.blit(
                     self.world.sprites[key],
