@@ -147,6 +147,7 @@ class Game:
             self._draw()
             self.dt = self.clock.tick(self.FPS) * 0.001
 
+
     def _update(self):
         for event in pygame.event.get(): # event handling loop
             if event.type == QUIT:
@@ -185,12 +186,11 @@ class Game:
         for npc in self.npcs:
             npc.update()
 
+
     def _draw(self):
         board = self.world.board
         radius = self.sight_radius
         playpos = self.player.position
-
-        self.screen.fill(World.VOID_COLOR)
 
         for i in xrange(-radius, radius + 1):
             for j in xrange(-radius, radius + 1):
@@ -201,13 +201,16 @@ class Game:
                         raise IndexError
                     key = board[tuple(ij + playpos)]
                 except IndexError:
-                    continue  # Outside of board.
+                    key = 'v'  # outside of board => void
 
                 # Draw terrain
                 self.screen.blit(
                     self.world.sprites[key],
                     (ij + radius) * World.METER_SIZE + [Game.STATUSBAR_OFFSET, 0],
                 )
+                if key == 'v':
+                    continue   # No placeables in void.
+
                 # Draw placeables
                 if not self.world.pointers[tuple(ij + playpos)] is None:
                     self.screen.blit(
