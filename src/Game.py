@@ -203,16 +203,18 @@ class Game:
                 except IndexError:
                     continue  # Outside of board.
 
+                # Draw terrain
                 self.screen.blit(
                     self.world.sprites[key],
                     (ij + radius) * World.METER_SIZE + [Game.STATUSBAR_OFFSET, 0],
                 )
-
-
-        self.screen.blit(
-            self.player.get_sprite(),
-            np.array([radius, radius]) * World.METER_SIZE + [Game.STATUSBAR_OFFSET, 0],
-        )
+                # Draw placeables
+                if not self.world.pointers[tuple(ij + playpos)] is None:
+                    self.screen.blit(
+                        self.world.pointers[tuple(ij + playpos)].get_sprite(),
+                        (ij + radius) * World.METER_SIZE +
+                        [Game.STATUSBAR_OFFSET, 0],
+                    )
 
         # Draw statusbar
         pygame.draw.rect(self.screen, Game.STATUSBAR_COLOR, (0, 0,
@@ -255,18 +257,6 @@ class Game:
         )
         label = font.render("FPS: %d" % FPS, 1, (255, 0, 0))
         self.screen.blit(label, (self.width - label.get_width(), 0))
-
-        # Draw placables
-        for item in self.placables:
-            self.screen.blit(item.get_sprite(),
-                    (item.position - self.player.position + radius) * World.METER_SIZE +\
-                    [Game.STATUSBAR_OFFSET, 0])
-
-        # Draw NPCs
-        for npc in self.npcs:
-            self.screen.blit(npc.get_sprite(),
-                    (npc.position - self.player.position + radius) * World.METER_SIZE +\
-                    [Game.STATUSBAR_OFFSET, 0])
 
         # If text dialog, draw it
         if len(self.text_dialog_queue) != 0:
