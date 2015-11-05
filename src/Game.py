@@ -141,6 +141,7 @@ class Game:
         self.text_dialog_queue = []
 
     def start(self):
+        self._draw_init()
         self._draw()
         while 1:
             self._update()
@@ -219,6 +220,25 @@ class Game:
                         [Game.STATUSBAR_OFFSET, 0],
                     )
 
+        # Draw FPS
+        FPS = 1. / self.dt
+        font = pygame.font.Font(
+            # Game.MONOSPACE_FONT,
+            resource_path(Game.FONTS_LOCATION, Game.MONOSPACE_FONT),
+            Game.STATUSBAR_FONTSIZE,
+        )
+        label = font.render("FPS: %d" % FPS, 1, (255, 0, 0))
+        self.screen.blit(label, (self.width - label.get_width(), 0))
+
+        # If text dialog, draw it
+        if len(self.text_dialog_queue) != 0:
+            self.text_dialog_queue[0].render()
+
+        pygame.display.update()
+
+
+    def _draw_init(self):
+
         # Draw statusbar
         pygame.draw.rect(self.screen, Game.STATUSBAR_COLOR, (0, 0,
             Game.STATUSBAR_OFFSET, self.height), 0)
@@ -244,25 +264,10 @@ class Game:
         for i in range(len(self.player.inventory)):
             x = i % Game.INV_COLS
             y = i / Game.INV_ROWS
-
             self.screen.blit(
                     self.player.inventory[i].get_sprite(),
                     [Game.INV_OFF + Game.INV_SPACE*x + Game.INV_WIDTH*x,
                      Game.STATUSBAR_MARGIN + label.get_height() + Game.INV_OFF +\
                      Game.INV_HEIGHT*y + Game.INV_SPACE*y])
-
-        # Draw FPS
-        FPS = 1. / self.dt
-        font = pygame.font.Font(
-            # Game.MONOSPACE_FONT,
-            resource_path(Game.FONTS_LOCATION, Game.MONOSPACE_FONT),
-            Game.STATUSBAR_FONTSIZE,
-        )
-        label = font.render("FPS: %d" % FPS, 1, (255, 0, 0))
-        self.screen.blit(label, (self.width - label.get_width(), 0))
-
-        # If text dialog, draw it
-        if len(self.text_dialog_queue) != 0:
-            self.text_dialog_queue[0].render()
 
         pygame.display.update()
