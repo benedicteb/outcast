@@ -34,6 +34,9 @@ class World:
             't': pygame.image.load(
                 Game.resource_path(Game.Game.SPRITES_LOCATION, 'tree.png')
             ).convert(),
+            'v': pygame.image.load(
+                Game.resource_path(Game.Game.SPRITES_LOCATION, 'void.png')
+            ).convert(),
         }
 
 
