@@ -141,11 +141,14 @@ class Game:
         self.text_dialog_queue = []
 
     def start(self):
+        self._draw_init()
+        self._draw_inventory()
         self._draw()
         while 1:
             self._update()
             self._draw()
             self.dt = self.clock.tick(self.FPS) * 0.001
+
 
     def _update(self):
         for event in pygame.event.get(): # event handling loop
@@ -179,18 +182,17 @@ class Game:
         for item in self.placables:
             if (self.player.position == item.position).all():
                 self.player.give_item(self.placables.pop(self.placables.index(item)))
+                self._draw_inventory()
 
         self.player.update()
-
         for npc in self.npcs:
             npc.update()
+
 
     def _draw(self):
         board = self.world.board
         radius = self.sight_radius
         playpos = self.player.position
-
-        self.screen.fill(World.VOID_COLOR)
 
         for i in xrange(-radius, radius + 1):
             for j in xrange(-radius, radius + 1):
@@ -201,18 +203,64 @@ class Game:
                         raise IndexError
                     key = board[tuple(ij + playpos)]
                 except IndexError:
-                    continue  # Outside of board.
+                    key = 'v'  # outside of board => void
 
+                # Draw terrain
                 self.screen.blit(
                     self.world.sprites[key],
                     (ij + radius) * World.METER_SIZE + [Game.STATUSBAR_OFFSET, 0],
                 )
+                if key == 'v':
+                    continue   # No placeables in void.
 
+                # Draw placeables
+                if not self.world.pointers[tuple(ij + playpos)] is None:
+                    self.screen.blit(
+                        self.world.pointers[tuple(ij + playpos)].get_sprite(),
+                        (ij + radius) * World.METER_SIZE +
+                        [Game.STATUSBAR_OFFSET, 0],
+                    )
 
-        self.screen.blit(
-            self.player.get_sprite(),
-            np.array([radius, radius]) * World.METER_SIZE + [Game.STATUSBAR_OFFSET, 0],
+        # Draw FPS
+        FPS = 1. / self.dt
+        font = pygame.font.Font(
+            # Game.MONOSPACE_FONT,
+            resource_path(Game.FONTS_LOCATION, Game.MONOSPACE_FONT),
+            Game.STATUSBAR_FONTSIZE,
         )
+
+        # If text dialog, draw it
+        if len(self.text_dialog_queue) != 0:
+            self.text_dialog_queue[0].render()
+
+        pygame.display.update()
+
+
+    def _draw_inventory(self):
+
+        # Draw inventory boxes
+        for i in range(Game.INV_COLS):
+            for j in range(Game.INV_ROWS):
+                pygame.draw.rect(self.screen, (0,0,0), (Game.INV_WIDTH*i +\
+                    Game.INV_OFF + Game.INV_SPACE*i, Game.STATUSBAR_MARGIN +\
+                    Game.STATUSBAR_LABEL_HEIGHT +
+                        Game.INV_OFF + Game.INV_HEIGHT*j +\
+                    Game.INV_SPACE*j, Game.INV_WIDTH,
+                    Game.INV_HEIGHT), 0)
+
+        # If player has inventory, fill
+        for i in range(len(self.player.inventory)):
+            x = i % Game.INV_COLS
+            y = i / Game.INV_ROWS
+            self.screen.blit(
+                    self.player.inventory[i].get_sprite(),
+                    [Game.INV_OFF + Game.INV_SPACE*x + Game.INV_WIDTH*x,
+                     Game.STATUSBAR_MARGIN + Game.STATUSBAR_LABEL_HEIGHT +
+                        Game.INV_OFF +\
+                     Game.INV_HEIGHT*y + Game.INV_SPACE*y])
+
+
+    def _draw_init(self):
 
         # Draw statusbar
         pygame.draw.rect(self.screen, Game.STATUSBAR_COLOR, (0, 0,
@@ -224,52 +272,5 @@ class Game:
             Game.STATUSBAR_FONTSIZE,
         )
         label = font.render("Inventory", 1, (0, 0, 0))
+        Game.STATUSBAR_LABEL_HEIGHT = label.get_height()
         self.screen.blit(label, (Game.STATUSBAR_MARGIN, Game.STATUSBAR_MARGIN))
-
-        # Draw inventory boxes
-        for i in range(Game.INV_COLS):
-            for j in range(Game.INV_ROWS):
-                pygame.draw.rect(self.screen, (0,0,0), (Game.INV_WIDTH*i +\
-                    Game.INV_OFF + Game.INV_SPACE*i, Game.STATUSBAR_MARGIN +\
-                    label.get_height() + Game.INV_OFF + Game.INV_HEIGHT*j +\
-                    Game.INV_SPACE*j, Game.INV_WIDTH,
-                    Game.INV_HEIGHT), 0)
-
-        # If player has inventory, fill
-        for i in range(len(self.player.inventory)):
-            x = i % Game.INV_COLS
-            y = i / Game.INV_ROWS
-
-            self.screen.blit(
-                    self.player.inventory[i].get_sprite(),
-                    [Game.INV_OFF + Game.INV_SPACE*x + Game.INV_WIDTH*x,
-                     Game.STATUSBAR_MARGIN + label.get_height() + Game.INV_OFF +\
-                     Game.INV_HEIGHT*y + Game.INV_SPACE*y])
-
-        # Draw FPS
-        FPS = 1. / self.dt
-        font = pygame.font.Font(
-            # Game.MONOSPACE_FONT,
-            resource_path(Game.FONTS_LOCATION, Game.MONOSPACE_FONT),
-            Game.STATUSBAR_FONTSIZE,
-        )
-        label = font.render("FPS: %d" % FPS, 1, (255, 0, 0))
-        self.screen.blit(label, (self.width - label.get_width(), 0))
-
-        # Draw placables
-        for item in self.placables:
-            self.screen.blit(item.get_sprite(),
-                    (item.position - self.player.position + radius) * World.METER_SIZE +\
-                    [Game.STATUSBAR_OFFSET, 0])
-
-        # Draw NPCs
-        for npc in self.npcs:
-            self.screen.blit(npc.get_sprite(),
-                    (npc.position - self.player.position + radius) * World.METER_SIZE +\
-                    [Game.STATUSBAR_OFFSET, 0])
-
-        # If text dialog, draw it
-        if len(self.text_dialog_queue) != 0:
-            self.text_dialog_queue[0].render()
-
-        pygame.display.update()
