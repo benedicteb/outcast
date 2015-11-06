@@ -94,6 +94,10 @@ class Game:
         K_w : func.angle2vec(1),
         K_a : func.angle2vec(2),
         K_s : func.angle2vec(3),
+        K_RIGHT : func.angle2vec(0),
+        K_UP    : func.angle2vec(1),
+        K_LEFT  : func.angle2vec(2),
+        K_DOWN  : func.angle2vec(3),
     }
 
     def __init__(self):
