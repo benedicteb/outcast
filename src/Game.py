@@ -142,6 +142,7 @@ class Game:
 
     def start(self):
         self._draw_init()
+        self._draw_inventory()
         self._draw()
         while 1:
             self._update()
@@ -181,9 +182,9 @@ class Game:
         for item in self.placables:
             if (self.player.position == item.position).all():
                 self.player.give_item(self.placables.pop(self.placables.index(item)))
+                self._draw_inventory()
 
         self.player.update()
-
         for npc in self.npcs:
             npc.update()
 
@@ -227,14 +228,36 @@ class Game:
             resource_path(Game.FONTS_LOCATION, Game.MONOSPACE_FONT),
             Game.STATUSBAR_FONTSIZE,
         )
-        label = font.render("FPS: %d" % FPS, 1, (255, 0, 0))
-        self.screen.blit(label, (self.width - label.get_width(), 0))
 
         # If text dialog, draw it
         if len(self.text_dialog_queue) != 0:
             self.text_dialog_queue[0].render()
 
         pygame.display.update()
+
+
+    def _draw_inventory(self):
+
+        # Draw inventory boxes
+        for i in range(Game.INV_COLS):
+            for j in range(Game.INV_ROWS):
+                pygame.draw.rect(self.screen, (0,0,0), (Game.INV_WIDTH*i +\
+                    Game.INV_OFF + Game.INV_SPACE*i, Game.STATUSBAR_MARGIN +\
+                    Game.STATUSBAR_LABEL_HEIGHT +
+                        Game.INV_OFF + Game.INV_HEIGHT*j +\
+                    Game.INV_SPACE*j, Game.INV_WIDTH,
+                    Game.INV_HEIGHT), 0)
+
+        # If player has inventory, fill
+        for i in range(len(self.player.inventory)):
+            x = i % Game.INV_COLS
+            y = i / Game.INV_ROWS
+            self.screen.blit(
+                    self.player.inventory[i].get_sprite(),
+                    [Game.INV_OFF + Game.INV_SPACE*x + Game.INV_WIDTH*x,
+                     Game.STATUSBAR_MARGIN + Game.STATUSBAR_LABEL_HEIGHT +
+                        Game.INV_OFF +\
+                     Game.INV_HEIGHT*y + Game.INV_SPACE*y])
 
 
     def _draw_init(self):
@@ -249,25 +272,5 @@ class Game:
             Game.STATUSBAR_FONTSIZE,
         )
         label = font.render("Inventory", 1, (0, 0, 0))
+        Game.STATUSBAR_LABEL_HEIGHT = label.get_height()
         self.screen.blit(label, (Game.STATUSBAR_MARGIN, Game.STATUSBAR_MARGIN))
-
-        # Draw inventory boxes
-        for i in range(Game.INV_COLS):
-            for j in range(Game.INV_ROWS):
-                pygame.draw.rect(self.screen, (0,0,0), (Game.INV_WIDTH*i +\
-                    Game.INV_OFF + Game.INV_SPACE*i, Game.STATUSBAR_MARGIN +\
-                    label.get_height() + Game.INV_OFF + Game.INV_HEIGHT*j +\
-                    Game.INV_SPACE*j, Game.INV_WIDTH,
-                    Game.INV_HEIGHT), 0)
-
-        # If player has inventory, fill
-        for i in range(len(self.player.inventory)):
-            x = i % Game.INV_COLS
-            y = i / Game.INV_ROWS
-            self.screen.blit(
-                    self.player.inventory[i].get_sprite(),
-                    [Game.INV_OFF + Game.INV_SPACE*x + Game.INV_WIDTH*x,
-                     Game.STATUSBAR_MARGIN + label.get_height() + Game.INV_OFF +\
-                     Game.INV_HEIGHT*y + Game.INV_SPACE*y])
-
-        pygame.display.update()
