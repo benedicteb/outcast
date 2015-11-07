@@ -94,6 +94,13 @@ class Person(Placeable):
         """
         self.velocity += speed_vector
 
+    def attack(self, p):
+        """Hurt p, if p is a hurtable Person."""
+        try:
+            p.hurt(50)  # 50 damage.
+        except AttributeError:  # Nothing to attack.
+            pass
+
     def hurt(self, dmg):
         self.health -= dmg
         if self.health <= 0:
