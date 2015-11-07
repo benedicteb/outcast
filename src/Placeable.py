@@ -9,6 +9,7 @@ import pygame
 import logging
 
 import Game
+import Functions as func
 
 class Placeable(object):
     """
@@ -44,6 +45,14 @@ class Placeable(object):
         self._sprite = pygame.transform.rotate(
             self._sprite, 90
         )
+
+    def get_facing(self):
+        """Directly returns this Placeables facing direction vector."""
+        return func.angle2vec(self.facing)
+
+    def get_target(self):
+        """Directly returns coordinate of the square thos Placeable is facing."""
+        return self.world.pointers[tuple(self.position + self.get_facing())]
 
     def get_sprite(self):
         # Rotate the sprite while keeping its center and size.

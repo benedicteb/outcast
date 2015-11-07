@@ -171,10 +171,8 @@ class Game:
                                 self.player.interacting_with = None
                                 continue
                     else:
-                        target = self.player.position + \
-                                 func.angle2vec(self.player.facing)
                         try:
-                            self.world.pointers[tuple(target)].interact()
+                            self.player.get_target().interact()
                         except AttributeError:
                             pass  # Nothing to interact with.
 
