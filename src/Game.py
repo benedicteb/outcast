@@ -175,6 +175,9 @@ class Game:
                             self.player.get_target().interact()
                         except AttributeError:
                             pass  # Nothing to interact with.
+                elif event.key == K_x:
+                    if not len(self.text_dialog_queue) > 0:
+                        self.player.attack(self.player.get_target())
 
             elif event.type == KEYUP:
                 if event.key in Game.keymap.keys():
