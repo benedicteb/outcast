@@ -14,10 +14,12 @@ from FindPath import Maze
 import Functions as func
 
 DEFAULT_HEALTH = 100
-DEFAULT_FEAR = 75
-DEFAULT_HATE = 25
+DEFAULT_FEAR = 0
+DEFAULT_HATE = 99
 LIMIT_FEAR = 50
 LIMIT_HATE = 50
+SPEED_MOVE = 10.  # [meter/sec]
+SPEED_ATTACK = 2.  # [strikes/sec]
 
 class Person(Placeable):
     """
@@ -37,7 +39,8 @@ class Person(Placeable):
         self.health = health
 
         self.inventory = []
-        self.move_cool = 0.10  # seconds
+        self.cooldown_move = 1. / SPEED_MOVE  # seconds
+        self.cooldown_attack = 1. / SPEED_ATTACK  # seconds
         self.cooldown_time = 0.
         self.velocity = np.array([0,0])
         self._add(self)
@@ -97,7 +100,7 @@ class Person(Placeable):
             self.world.pointers[tuple(self.position)] = None
             self.position = newpos
             self.world.pointers[tuple(self.position)] = self
-            self.cooldown_time += self.move_cool
+            self.cooldown_time += self.cooldown_move
             return True
         else:
             return False
@@ -110,10 +113,12 @@ class Person(Placeable):
 
     def attack(self, p):
         """Hurt p, if p is a hurtable Person."""
-        try:
-            p.hurt(50)  # 50 damage.
-        except AttributeError:  # Nothing to attack.
-            pass
+        if self.is_cooldowned():
+            try:
+                p.hurt(50)  # 50 damage.
+            except AttributeError:  # Nothing to attack.
+                pass
+            self.cooldown_time += self.cooldown_attack
 
     def hurt(self, dmg):
         self.health -= dmg
@@ -299,7 +304,7 @@ class NPC(Person):
                     return
                 else:
                     self.path = []
-                self.cooldown_time += self.move_cool
+                self.cooldown_time += self.cooldown_move
             else:  # Else backup solution.
                 goal = self.next_step()
                 newpos = self.position + (self.velocity + goal)
