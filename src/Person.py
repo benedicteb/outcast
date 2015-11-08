@@ -145,6 +145,7 @@ class Person(Placeable):
     def _die(self):
         self.dialog = "I died."
         self.update = self._update_dead
+        self.action = "dead"
 
     def _update_dead(self):
         # Cannot do anything when dead.

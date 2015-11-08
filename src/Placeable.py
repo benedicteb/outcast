@@ -46,6 +46,16 @@ class Placeable(object):
         self._sprite = pygame.transform.rotate(
             self._sprite, 90
         )
+        try:
+            self._sprite_dead = pygame.image.load(Game.resource_path(
+                Game.Game.SPRITES_LOCATION, sprite + "_dead" +
+                Game.Game.SPRITES_EXT
+            )).convert_alpha()
+            self._sprite_dead = pygame.transform.rotate(
+                self._sprite_dead, 90
+            )
+        except:
+            pass
 
     def get_facing(self):
         """Directly returns this Placeables facing direction vector."""
@@ -60,8 +70,10 @@ class Placeable(object):
         if self.action == "attacking":
             merged = self._sprite.copy()
             merged.blit(self._sprite_weapon, (0, 0))
+        elif self.action == "dead":
+            merged = self._sprite_dead
         else:
-            merged = self._sprite.copy()
+            merged = self._sprite
 
         # Rotate the sprite while keeping its center and size.
         rot_image = pygame.transform.rotate(
