@@ -142,6 +142,21 @@ class Game:
                 items=[Page(PAGE9, position=None)]),
         ]
 
+        # Randomize personalities
+        avg_emo = 55.
+        N = len(self.npcs)
+        total_emo = N * avg_emo * 2
+        emo_list = np.random.uniform(size=(N, 2))
+        emo_list *=  total_emo / emo_list.sum()
+        while emo_list.max() > 100:
+            indices = np.where(emo_list > 100)
+            rest_emo = np.sum(emo_list[indices])
+            emo_list[indices] = 0
+            emo_list += rest_emo / (2 * N)
+        for i, npc in enumerate(self.npcs):
+            npc.fear = emo_list[i, 0]
+            npc.hate = emo_list[i, 1]
+
         self.text_dialog_queue = []
 
     def start(self):
