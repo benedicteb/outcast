@@ -255,7 +255,7 @@ class NPC(Person):
 
         diff = (self.position - self.game.player.position)
         if diff.sum() <= 10:
-            if self.hate >= LIMIT_HATE:
+            if self.hate >= LIMIT_HATE and self.hate >= self.fear:
                 idealtarget = self.position - diff
             elif self.fear >= LIMIT_FEAR:
                 idealtarget = self.position + diff
