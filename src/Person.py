@@ -14,8 +14,12 @@ from FindPath import Maze
 import Functions as func
 
 DEFAULT_HEALTH = 100
-DEFAULT_FEAR = 75
-DEFAULT_HATE = 25
+DEFAULT_FEAR = 0
+DEFAULT_HATE = 99
+LIMIT_FEAR = 50
+LIMIT_HATE = 50
+SPEED_MOVE = 10.  # [meter/sec]
+SPEED_ATTACK = 2.  # [strikes/sec]
 
 class Person(Placeable):
     """
@@ -35,8 +39,9 @@ class Person(Placeable):
         self.health = health
 
         self.inventory = []
-        self.move_cool = 0.10  # seconds
-        self.move_time = np.inf
+        self.cooldown_move = 1. / SPEED_MOVE  # seconds
+        self.cooldown_attack = 1. / SPEED_ATTACK  # seconds
+        self.cooldown_time = 0.
         self.velocity = np.array([0,0])
         self._add(self)
 
@@ -50,7 +55,18 @@ class Person(Placeable):
         if (self.velocity != 0).any():
             newpos = self.position + self.velocity
             self.move(newpos)
-        self.move_time += self.game.dt
+        self.cooldown()
+
+    def cooldown(self):
+        self.cooldown_time -= self.game.dt
+        if self.cooldown_time < 0:
+            self.cooldown_time = 0
+
+    def is_cooldowned(self):
+        if self.cooldown_time == 0:
+            return True
+        else:
+            return False
 
     def move(self, newpos):
 
@@ -68,6 +84,10 @@ class Person(Placeable):
             if isinstance(self.world.pointers[tuple(newpos)], Person):
                 # Another Person is in the way.
                 on_walkable = False
+                if (isinstance(self.world.pointers[tuple(newpos)], Player) and
+                    self.hate >= LIMIT_HATE
+                ):
+                    self.attack(self.world.pointers[tuple(newpos)])
 
         # If new position is on water, must have boat
         if self.world.board[tuple(newpos)] == 'w':
@@ -75,15 +95,12 @@ class Person(Placeable):
             has_boat = 'Boat' in names
             on_walkable = has_boat
 
-        # Only walk after certain cooldown
-        cooldown_passed = self.move_time > self.move_cool
-
         # Check if step is valid, and if it is, move
-        if (inside_x and inside_y and on_walkable and cooldown_passed):
+        if (inside_x and inside_y and on_walkable and self.is_cooldowned()):
             self.world.pointers[tuple(self.position)] = None
             self.position = newpos
             self.world.pointers[tuple(self.position)] = self
-            self.move_time = 0
+            self.cooldown_time += self.cooldown_move
             return True
         else:
             return False
@@ -96,10 +113,12 @@ class Person(Placeable):
 
     def attack(self, p):
         """Hurt p, if p is a hurtable Person."""
-        try:
-            p.hurt(50)  # 50 damage.
-        except AttributeError:  # Nothing to attack.
-            pass
+        if self.is_cooldowned():
+            try:
+                p.hurt(50)  # 50 damage.
+            except AttributeError:  # Nothing to attack.
+                pass
+            self.cooldown_time += self.cooldown_attack
 
     def hurt(self, dmg):
         self.health -= dmg
@@ -224,12 +243,14 @@ class NPC(Person):
 
     def set_target(self):
 
-        change = (self.position - self.game.player.position)
-        if change.sum() <= 10 and max(self.fear, self.hate) > 50:
-            if self.fear > self.hate:
-                idealtarget = self.position + change
+        diff = (self.position - self.game.player.position)
+        if diff.sum() <= 10:
+            if self.hate >= LIMIT_HATE:
+                idealtarget = self.position - diff
+            elif self.fear >= LIMIT_FEAR:
+                idealtarget = self.position + diff
             else:
-                idealtarget = self.position - change
+                idealtarget = self.position + np.random.randint(-3, 3+1, size=2)
         else:
             idealtarget = self.position + np.random.randint(-3, 3+1, size=2)
 
@@ -266,8 +287,7 @@ class NPC(Person):
             return False
 
         # Only walk after certain cooldown
-        cooldown_passed = self.move_time > self.move_cool
-        if cooldown_passed:
+        if self.is_cooldowned():
             if not self.path:  # if empty or None
                 self.set_target()
                 self.set_path()
@@ -284,7 +304,7 @@ class NPC(Person):
                     return
                 else:
                     self.path = []
-                self.move_time = 0
+                self.cooldown_time += self.cooldown_move
             else:  # Else backup solution.
                 goal = self.next_step()
                 newpos = self.position + (self.velocity + goal)
@@ -307,7 +327,7 @@ class NPC(Person):
                 newpos = self.position + self.velocity
                 super(NPC, self).move(newpos)
 
-        self.move_time += self.game.dt
+        self.cooldown()
 
     def interact(self):
         """
