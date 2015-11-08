@@ -7,6 +7,7 @@ import numpy as np
 import pygame
 import logging
 
+import Game
 from Placeable import Placeable
 from Item import Item, Page
 from Text import TextDialog
@@ -44,6 +45,12 @@ class Person(Placeable):
         self.cooldown_time = 0.
         self.velocity = np.array([0,0])
         self._add(self)
+        self._sprite_weapon = pygame.image.load(Game.resource_path(
+            Game.Game.SPRITES_LOCATION, "knife" + Game.Game.SPRITES_EXT
+        )).convert_alpha()
+        self._sprite_weapon = pygame.transform.rotate(
+            self._sprite_weapon, 90
+        )
 
     @classmethod
     def _add(self, p):
