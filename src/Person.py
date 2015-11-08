@@ -38,7 +38,7 @@ class Person(Placeable):
 
         self.inventory = []
         self.move_cool = 0.10  # seconds
-        self.move_time = np.inf
+        self.cooldown_time = 0.
         self.velocity = np.array([0,0])
         self._add(self)
 
@@ -52,7 +52,18 @@ class Person(Placeable):
         if (self.velocity != 0).any():
             newpos = self.position + self.velocity
             self.move(newpos)
-        self.move_time += self.game.dt
+        self.cooldown()
+
+    def cooldown(self):
+        self.cooldown_time -= self.game.dt
+        if self.cooldown_time < 0:
+            self.cooldown_time = 0
+
+    def is_cooldowned(self):
+        if self.cooldown_time == 0:
+            return True
+        else:
+            return False
 
     def move(self, newpos):
 
@@ -81,15 +92,12 @@ class Person(Placeable):
             has_boat = 'Boat' in names
             on_walkable = has_boat
 
-        # Only walk after certain cooldown
-        cooldown_passed = self.move_time > self.move_cool
-
         # Check if step is valid, and if it is, move
-        if (inside_x and inside_y and on_walkable and cooldown_passed):
+        if (inside_x and inside_y and on_walkable and self.is_cooldowned()):
             self.world.pointers[tuple(self.position)] = None
             self.position = newpos
             self.world.pointers[tuple(self.position)] = self
-            self.move_time = 0
+            self.cooldown_time += self.move_cool
             return True
         else:
             return False
@@ -274,8 +282,7 @@ class NPC(Person):
             return False
 
         # Only walk after certain cooldown
-        cooldown_passed = self.move_time > self.move_cool
-        if cooldown_passed:
+        if self.is_cooldowned():
             if not self.path:  # if empty or None
                 self.set_target()
                 self.set_path()
@@ -292,7 +299,7 @@ class NPC(Person):
                     return
                 else:
                     self.path = []
-                self.move_time = 0
+                self.cooldown_time += self.move_cool
             else:  # Else backup solution.
                 goal = self.next_step()
                 newpos = self.position + (self.velocity + goal)
@@ -315,7 +322,7 @@ class NPC(Person):
                 newpos = self.position + self.velocity
                 super(NPC, self).move(newpos)
 
-        self.move_time += self.game.dt
+        self.cooldown()
 
     def interact(self):
         """
