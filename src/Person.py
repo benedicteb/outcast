@@ -61,6 +61,7 @@ class Person(Placeable):
         self.cooldown_time -= self.game.dt
         if self.cooldown_time < 0:
             self.cooldown_time = 0
+            self.action = "none"
 
     def is_cooldowned(self):
         if self.cooldown_time == 0:
@@ -100,6 +101,7 @@ class Person(Placeable):
             self.world.pointers[tuple(self.position)] = None
             self.position = newpos
             self.world.pointers[tuple(self.position)] = self
+            self.action = "moving"
             self.cooldown_time += self.cooldown_move
             return True
         else:
@@ -114,6 +116,7 @@ class Person(Placeable):
     def attack(self, p):
         """Hurt p, if p is a hurtable Person."""
         if self.is_cooldowned():
+            self.action = "attacking"
             try:
                 p.hurt(50)  # 50 damage.
             except AttributeError:  # Nothing to attack.

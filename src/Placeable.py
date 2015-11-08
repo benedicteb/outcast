@@ -34,6 +34,7 @@ class Placeable(object):
 
         self.position = np.array(position)
         self.facing = 3
+        self.action = "none"
         self.game = game
         self.world = world
         if not position is None:
