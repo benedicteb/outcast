@@ -125,13 +125,19 @@ class Person(Placeable):
         if self.is_cooldowned():
             self.action = "attacking"
             try:
-                p.hurt(50)  # 50 damage.
+                dmg = 50
+                p.hurt(dmg)
             except AttributeError:  # Nothing to attack.
                 pass
             self.cooldown_time += self.cooldown_attack
 
     def hurt(self, dmg):
         self.health -= dmg
+        try:
+            self.fear += dmg * 1.  # Fear and hate player more when attacked.
+            self.hate += dmg * 1.
+        except AttributeError:
+            pass
         if self.health <= 0:
             self.health = 0
             self._die()
