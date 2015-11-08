@@ -344,6 +344,17 @@ class NPC(Person):
         Called when player interacts with this NPC.
         """
 
+        if self.hate >= LIMIT_HATE:
+            # If NPC hate player he will not give away anything.
+            if np.random.randint(3) == 0:
+                dialog = "I hate you!"
+            elif np.random.randint(2) == 0:
+                dialog = "Die, bitch!!"
+            else:
+                dialog = "I will kill you for what you did!"
+            TextDialog(dialog, self.game)
+            return
+
         self.fear -= 50
         if not self.dialog:
             return
