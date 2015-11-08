@@ -7,6 +7,7 @@ import numpy as np
 import pygame
 import logging
 
+import Game
 from Placeable import Placeable
 from Item import Item, Page
 from Text import TextDialog
@@ -44,6 +45,12 @@ class Person(Placeable):
         self.cooldown_time = 0.
         self.velocity = np.array([0,0])
         self._add(self)
+        self._sprite_weapon = pygame.image.load(Game.resource_path(
+            Game.Game.SPRITES_LOCATION, "knife" + Game.Game.SPRITES_EXT
+        )).convert_alpha()
+        self._sprite_weapon = pygame.transform.rotate(
+            self._sprite_weapon, 90
+        )
 
     @classmethod
     def _add(self, p):
@@ -61,6 +68,7 @@ class Person(Placeable):
         self.cooldown_time -= self.game.dt
         if self.cooldown_time < 0:
             self.cooldown_time = 0
+            self.action = "none"
 
     def is_cooldowned(self):
         if self.cooldown_time == 0:
@@ -100,6 +108,7 @@ class Person(Placeable):
             self.world.pointers[tuple(self.position)] = None
             self.position = newpos
             self.world.pointers[tuple(self.position)] = self
+            self.action = "moving"
             self.cooldown_time += self.cooldown_move
             return True
         else:
@@ -114,6 +123,7 @@ class Person(Placeable):
     def attack(self, p):
         """Hurt p, if p is a hurtable Person."""
         if self.is_cooldowned():
+            self.action = "attacking"
             try:
                 p.hurt(50)  # 50 damage.
             except AttributeError:  # Nothing to attack.

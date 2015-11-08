@@ -34,6 +34,7 @@ class Placeable(object):
 
         self.position = np.array(position)
         self.facing = 3
+        self.action = "none"
         self.game = game
         self.world = world
         if not position is None:
@@ -55,11 +56,18 @@ class Placeable(object):
         return self.world.pointers[tuple(self.position + self.get_facing())]
 
     def get_sprite(self):
+
+        if self.action == "attacking":
+            merged = self._sprite.copy()
+            merged.blit(self._sprite_weapon, (0, 0))
+        else:
+            merged = self._sprite.copy()
+
         # Rotate the sprite while keeping its center and size.
         rot_image = pygame.transform.rotate(
-            self._sprite, self.facing*90
+            merged, self.facing*90
         )
-        rot_rect = self._sprite.get_rect().copy()
+        rot_rect = merged.get_rect().copy()
         rot_rect.center = rot_image.get_rect().center
         rot_image = rot_image.subsurface(rot_rect).copy()
         return rot_image
