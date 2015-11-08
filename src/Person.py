@@ -70,6 +70,10 @@ class Person(Placeable):
             if isinstance(self.world.pointers[tuple(newpos)], Person):
                 # Another Person is in the way.
                 on_walkable = False
+                if (isinstance(self.world.pointers[tuple(newpos)], Player) and
+                    self.hate >= LIMIT_HATE
+                ):
+                    self.attack(self.world.pointers[tuple(newpos)])
 
         # If new position is on water, must have boat
         if self.world.board[tuple(newpos)] == 'w':
