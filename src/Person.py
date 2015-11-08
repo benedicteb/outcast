@@ -16,6 +16,8 @@ import Functions as func
 DEFAULT_HEALTH = 100
 DEFAULT_FEAR = 75
 DEFAULT_HATE = 25
+LIMIT_FEAR = 50
+LIMIT_HATE = 50
 
 class Person(Placeable):
     """
@@ -224,12 +226,14 @@ class NPC(Person):
 
     def set_target(self):
 
-        change = (self.position - self.game.player.position)
-        if change.sum() <= 10 and max(self.fear, self.hate) > 50:
-            if self.fear > self.hate:
-                idealtarget = self.position + change
+        diff = (self.position - self.game.player.position)
+        if diff.sum() <= 10:
+            if self.hate >= LIMIT_HATE:
+                idealtarget = self.position - diff
+            elif self.fear >= LIMIT_FEAR:
+                idealtarget = self.position + diff
             else:
-                idealtarget = self.position - change
+                idealtarget = self.position + np.random.randint(-3, 3+1, size=2)
         else:
             idealtarget = self.position + np.random.randint(-3, 3+1, size=2)
 
