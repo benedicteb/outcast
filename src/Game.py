@@ -229,10 +229,11 @@ class Game:
         # Draw FPS
         FPS = 1. / self.dt
         font = pygame.font.Font(
-            # Game.MONOSPACE_FONT,
             resource_path(Game.FONTS_LOCATION, Game.MONOSPACE_FONT),
             Game.STATUSBAR_FONTSIZE,
         )
+        label = font.render("FPS: %2d" % FPS, 1, (255, 0, 0))
+        self.screen.blit(label, (self.width - label.get_width(), 0))
 
         # If text dialog, draw it
         if len(self.text_dialog_queue) != 0:
