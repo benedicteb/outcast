@@ -146,6 +146,7 @@ class Person(Placeable):
         self.dialog = "I died."
         self.update = self._update_dead
         self.action = "dead"
+        self.dialog = "* He is dead. You loot his items. *"
 
     def _update_dead(self):
         # Cannot do anything when dead.
@@ -178,6 +179,7 @@ class Player(Person):
         Player reads pages if they are picked up.
         """
         super(Player, self).give_item(item)
+        self.game._draw_inventory()
 
         TextDialog("You got %s!" % item.name.lower(), self.game)
 
@@ -351,7 +353,11 @@ class NPC(Person):
         Called when player interacts with this NPC.
         """
 
-        if self.hate >= LIMIT_HATE:
+        if self.action == "dead":
+            TextDialog(self.dialog, self.game)
+            self.dialog = "* He is dead. *"
+
+        elif self.hate >= LIMIT_HATE:
             # If NPC hate player he will not give away anything.
             if np.random.randint(3) == 0:
                 dialog = "I hate you!"
@@ -362,12 +368,12 @@ class NPC(Person):
             TextDialog(dialog, self.game)
             return
 
-        self.fear -= 50
-        if not self.dialog:
-            return
-
-        TextDialog(self.dialog, self.game)
-        self.dialog = "I have nothing more to tell you."
+        else:
+            self.fear -= 50
+            if not self.dialog:
+                return
+            TextDialog(self.dialog, self.game)
+            self.dialog = "I have nothing more to tell you."
 
         for i in range(len(self.inventory)):
             self.game.player.give_item(self.inventory.pop(i))

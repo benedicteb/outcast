@@ -202,7 +202,6 @@ class Game:
         for item in self.placables:
             if (self.player.position == item.position).all():
                 self.player.give_item(self.placables.pop(self.placables.index(item)))
-                self._draw_inventory()
 
         self.player.update()
         for npc in self.npcs:
