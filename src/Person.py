@@ -9,6 +9,7 @@ import logging
 
 import Game
 from Placeable import Placeable
+from Projectile import Projectile
 from Item import Item, Page
 from Text import TextDialog
 from FindPath import Maze
@@ -130,6 +131,17 @@ class Person(Placeable):
             except AttributeError:  # Nothing to attack.
                 pass
             self.cooldown_time += self.cooldown_attack
+
+
+    def shoot(self):
+        Projectile(
+            "plaYer",  #TODO give a proper name and make fireball sprite
+            self.position+self.get_facing(),
+            self.facing,
+            game=self.game,
+            world=self.world,
+        )
+
 
     def hurt(self, dmg):
         self.health -= dmg

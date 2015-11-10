@@ -142,6 +142,8 @@ class Game:
                 items=[Page(PAGE9, position=None)]),
         ]
 
+        self.projectiles = []
+
         # Randomize personalities
         avg_emo = 55.
         N = len(self.npcs)
@@ -193,6 +195,9 @@ class Game:
                 elif event.key == K_x:
                     if not len(self.text_dialog_queue) > 0:
                         self.player.attack(self.player.get_target())
+                elif event.key == K_z:
+                    if not len(self.text_dialog_queue) > 0:
+                        self.player.shoot()
 
             elif event.type == KEYUP:
                 if event.key in Game.keymap.keys():
@@ -206,6 +211,8 @@ class Game:
         self.player.update()
         for npc in self.npcs:
             npc.update()
+        for projectile in self.projectiles:
+            projectile.update()
 
 
     def _draw(self):
